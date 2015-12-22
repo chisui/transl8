@@ -13,7 +13,7 @@ public class IT {
 	public void testAll() throws Exception {
 
 		Translatable t = () -> TranslationHint.of("my.key")
-				.withArgument((Translatable) () -> TranslationHint.of("sub.key").withFallback("hi"))
+				.withArguments((Translatable) () -> TranslationHint.of("sub.key").withFallback("hi"))
 				.andArguments("arg1", new Object() {
 					public String toString() {
 						return "arg2";

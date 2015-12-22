@@ -1,11 +1,14 @@
 package net.chisui.transl8;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -30,47 +33,40 @@ public class AbstractTranslationHintTest {
 		assertThat(hint.equals(hint), is(true));
 	}
 	
-	
 	@Test
-	public void testEqualsTrue() throws Exception {
-
-		assertThat(new AbstractTranslationHintImpl().equals(TranslationHint.of("key", "arg0", "arg1").withFallback("fallback")), is(true));
-	}
-	
-	@Test
-	public void testEqualsDifferentKey() throws Exception {
-
-		assertThat(new AbstractTranslationHintImpl().equals(TranslationHint.of("otherKey", "arg0", "arg1").withFallback("fallback")), is(false));
-	}
-	
-	@Test
-	public void testEqualsDifferentArgs() throws Exception {
-
-		assertThat(new AbstractTranslationHintImpl().equals(TranslationHint.of("key", "arg0", "arg1", "arg2").withFallback("fallback")), is(false));
-	}
-	
-	@Test
-	public void testEqualsNoArgs() throws Exception {
-
-		assertThat(new AbstractTranslationHintImpl().equals(TranslationHint.of("key").withFallback("fallback")), is(false));
-	}
-	
-	@Test
-	public void testEqualsDifferentFallback() throws Exception {
-
-		assertThat(new AbstractTranslationHintImpl().equals(TranslationHint.of("key", "arg0", "arg1").withFallback("anotherFallback")), is(false));
-	}
-	
-	@Test
-	public void testEqualsNoFallback() throws Exception {
-
-		assertThat(new AbstractTranslationHintImpl().equals(TranslationHint.of("key", "arg0", "arg1")), is(false));
-	}
-	
-	@Test
-	public void testHashcode() throws Exception {
+	public void testEquals() throws Exception {
 		
-		assertThat(new AbstractTranslationHintImpl().hashCode() == new AbstractTranslationHintImpl().hashCode(), is(true));
+		Set<Object> hints = new HashSet<>();
+		
+		hints.add("hello");
+		hints.add(TranslationHint.of("key"));
+		hints.add(TranslationHint.of("key"));
+		hints.add(TranslationHint.of("key").withArguments("arg"));
+		hints.add(TranslationHint.of("key").withArguments("arg"));
+		hints.add(TranslationHint.of("key").withArguments("arg1"));
+		hints.add(TranslationHint.of("key1").withArguments("arg"));
+		hints.add(TranslationHint.of("key").withFallback("fallback"));
+		hints.add(TranslationHint.of("key").withFallback("fallback"));
+		hints.add(TranslationHint.of("key").withFallback("fallback1"));
+		hints.add(TranslationHint.of("key").withArguments("arg").withFallback("fallback"));
+		hints.add(TranslationHint.of("key").withArguments("arg").withFallback("fallback"));
+		hints.add(TranslationHint.of("key1").withArguments("arg").withFallback("fallback"));
+		hints.add(TranslationHint.of("key").withArguments("arg1").withFallback("fallback"));
+		hints.add(TranslationHint.of("key").withArguments("arg").withFallback("fallback1"));
+		
+		assertThat(hints, containsInAnyOrder(
+				"hello",
+				TranslationHint.of("key"),
+				TranslationHint.of("key").withArguments("arg"),
+				TranslationHint.of("key").withArguments("arg1"),
+				TranslationHint.of("key1").withArguments("arg"),
+				TranslationHint.of("key").withFallback("fallback"),
+				TranslationHint.of("key").withFallback("fallback1"),
+				TranslationHint.of("key").withArguments("arg").withFallback("fallback"),
+				TranslationHint.of("key1").withArguments("arg").withFallback("fallback"),
+				TranslationHint.of("key").withArguments("arg1").withFallback("fallback"),
+				TranslationHint.of("key").withArguments("arg").withFallback("fallback1")
+		));
 	}
 
 	@Test
@@ -79,8 +75,31 @@ public class AbstractTranslationHintTest {
 		String str = new AbstractTranslationHintImpl().toString();
 		
 		
-		assertThat(str, is("AbstractTranslationHintImpl [key=\"key\", args=[arg0, arg1], fallback=\"fallback\"]"));
+		assertThat(str, is("TranslationHint [key=\"key\", args=[arg0, arg1], fallback=\"fallback\"]"));
 	}
 
+	@Test
+	public void testToStringNoArgs() throws Exception {
+		
+		String str = TranslationHint
+				.of("key")
+				.withFallback("fallback")
+				.toString();
+		
+		
+		assertThat(str, is("TranslationHint [key=\"key\", fallback=\"fallback\"]"));
+	}
+	
+	@Test
+	public void testToStringNoFallback() throws Exception {
+		
+		String str = TranslationHint
+				.of("key")
+				.withArguments("arg0", "arg1")
+				.toString();
+		
+		
+		assertThat(str, is("TranslationHint [key=\"key\", args=[arg0, arg1]]"));
+	}
 
 }

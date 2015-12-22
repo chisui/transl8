@@ -25,49 +25,45 @@ public interface TranslationHint {
 	}
 	
 	
-	static KeyTranslationHint of( Object key) {
+	static KeyTranslationHint of(final Object key) {
 		return new KeyTranslationHint(key);
 	}
 	
 	final class KeyTranslationHint extends ImmutableTranslationHint {
 
-		KeyTranslationHint(Object key){
+		KeyTranslationHint(final Object key){
 			super(key, Collections.emptyList(), Optional.empty());
 		}
 		
-		public KeyFallbackTranslationHint withFallback(String fallback) {
+		public KeyFallbackTranslationHint withFallback(final String fallback) {
 			return new KeyFallbackTranslationHint(getKey(), fallback);
 		}
 
-		public KeyArgumentsTranslationHint withArgument(Object arg) {
-			return new KeyArgumentsTranslationHint(getKey(), Collections.unmodifiableList(Arrays.asList(arg)));
-		}
-		
-		public KeyArgumentsTranslationHint withArguments(Object... args) {
+		public KeyArgumentsTranslationHint withArguments(final Object... args) {
 			return new KeyArgumentsTranslationHint(getKey(), Collections.unmodifiableList(Arrays.asList(args)));
 		}
 	}
 	
 	
-	static KeyArgumentsTranslationHint of( Object key,  Object... args) {
+	static KeyArgumentsTranslationHint of(final Object key, final Object... args) {
 		return new KeyArgumentsTranslationHint(key, Collections.unmodifiableList(Arrays.asList(args)));
 	}
 	
 	final class KeyArgumentsTranslationHint extends ImmutableTranslationHint {
 
-		KeyArgumentsTranslationHint(Object key, List<?> args) {
+		KeyArgumentsTranslationHint(final Object key, final List<?> args) {
 			super(key, args, Optional.empty());
 		}
 
-		public KeyArgumentsTranslationHint andArguments(Object... args) {
-			List<?> oldArgs = getArguments();
-			List<Object> newArgs = new ArrayList<>(oldArgs.size() +  args.length);
+		public KeyArgumentsTranslationHint andArguments(final Object... args) {
+			final List<?> oldArgs = getArguments();
+			final List<Object> newArgs = new ArrayList<>(oldArgs.size() +  args.length);
 			newArgs.addAll(oldArgs);
 			Collections.addAll(newArgs, args);
 			return new KeyArgumentsTranslationHint(getKey(), Collections.unmodifiableList(newArgs));
 		}
 
-		public FullTranslationHint withFallback(String fallback) {
+		public FullTranslationHint withFallback(final String fallback) {
 			return new FullTranslationHint(getKey(), getArguments(), Optional.of(fallback));
 		}
 
@@ -76,15 +72,11 @@ public interface TranslationHint {
 	
 	final class KeyFallbackTranslationHint extends ImmutableTranslationHint {
 
-		KeyFallbackTranslationHint(Object key, String fallback) {
+		KeyFallbackTranslationHint(final Object key, final String fallback) {
 			super(key, Collections.emptyList(), Optional.of(fallback));
 		}
 		
-		public FullTranslationHint withArgument(Object arg) {
-			return new FullTranslationHint(getKey(), Collections.unmodifiableList(Arrays.asList(arg)), getFallback());
-		}
-		
-		public FullTranslationHint withArguments(Object... args) {
+		public FullTranslationHint withArguments(final Object... args) {
 			return new FullTranslationHint(getKey(), Collections.unmodifiableList(Arrays.asList(args)), getFallback());
 		}
 
@@ -92,24 +84,13 @@ public interface TranslationHint {
 	
 	final class FullTranslationHint extends ImmutableTranslationHint {
 
-		FullTranslationHint(Object key, List<?> args, Optional<String> fallback) {
+		FullTranslationHint(final Object key, final List<?> args, final Optional<String> fallback) {
 			super(key, args, fallback);
 		}
 		
-		public FullTranslationHint andArgument(Object arg) {
-			List<?> oldArgs = getArguments();
-			List<Object> newArgs = new ArrayList<>(oldArgs.size() + 1);
-			newArgs.addAll(oldArgs);
-			newArgs.add(arg);
-			return new FullTranslationHint(
-					getKey(), 
-					Collections.unmodifiableList(newArgs), 
-					getFallback());
-		}
-		
-		public FullTranslationHint andArguments(Object... args) {
-			List<?> oldArgs = getArguments();
-			List<Object> newArgs = new ArrayList<>(oldArgs.size() + args.length);
+		public FullTranslationHint andArguments(final Object... args) {
+			final List<?> oldArgs = getArguments();
+			final List<Object> newArgs = new ArrayList<>(oldArgs.size() + args.length);
 			newArgs.addAll(oldArgs);
 			Collections.addAll(newArgs, args);
 			return new FullTranslationHint(
@@ -132,14 +113,14 @@ public interface TranslationHint {
 		}
 
 		@Override
-		public boolean equals(Object obj) {
+		public boolean equals(final Object obj) {
 			if (obj == this){
 				return true;
 			} else if(obj instanceof TranslationHint) {
-				TranslationHint that = (TranslationHint) obj;
-				return this.getKey().equals(that.getKey())
+				final TranslationHint that = (TranslationHint) obj;
+				return this.getKey()      .equals(that.getKey())
 					&& this.getArguments().equals(that.getArguments())
-					&& this.getFallback().equals(that.getFallback());
+					&& this.getFallback() .equals(that.getFallback());
 			} else {
 				return false;
 			}
@@ -147,9 +128,8 @@ public interface TranslationHint {
 
 		@Override
 		public String toString() {
-			List<?> args = getArguments();
-			return getClass().getSimpleName() 
-					+ " [key=\"" + getKey() + "\"" 
+			final List<?> args = getArguments();
+			return "TranslationHint [key=\"" + getKey() + "\"" 
 					+ (!args.isEmpty() 
 							? ", args=" + args
 							: "")
@@ -168,9 +148,9 @@ public interface TranslationHint {
 		private final Optional<String> fallback;
 
 		public ImmutableTranslationHint(
-				 Object key, 
-				 List<?> args, 
-				 Optional<String> fallback) {
+				 final Object key, 
+				 final List<?> args, 
+				 final Optional<String> fallback) {
 			this.key = requireNonNull(key);
 			this.args = requireNonNull(args);
 			this.fallback = requireNonNull(fallback);
