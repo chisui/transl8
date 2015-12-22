@@ -7,6 +7,34 @@
   <artifactId>translate</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   
+  <name>transl8</name>
+  <description>a functional translation library</description>
+  <url>https://github.com/chisui/transl8</url>
+  
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>https://github.com/chisui/transl8/blob/master/LICENSE</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  
+  <scm>
+    <connection>scm:git:https://github.com/chisui/transl8.git</connection>
+    <developerConnection>${project.scm.connection}</developerConnection>
+    <url>https://github.com/chisui/transl8/tree/${project.scm.tag}</url>
+    <tag>master</tag>
+  </scm>
+  
+  <issueManagement>
+    <system>github</system>
+    <url>https://github.com/chisui/transl8/issues</url>
+  </issueManagement>
+  <ciManagement>
+    <system>travis CI</system>
+    <url>https://travis-ci.org/chisui/transl8</url>
+  </ciManagement>
+  
   <properties>
   	<!-- test -->
     <jmockit.version>1.20</jmockit.version>
