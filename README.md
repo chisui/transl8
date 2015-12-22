@@ -1,2 +1,4 @@
 # transl8
-java translation library
+![travis badge](https://travis-ci.org/chisui/transl8.svg?branch=master)
+
+functional java translation library
