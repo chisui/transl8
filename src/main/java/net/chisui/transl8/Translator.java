@@ -10,13 +10,14 @@ import java.util.function.Supplier;
 import net.chisui.transl8.format.Format;
 import net.chisui.transl8.format.Formatable;
 import net.chisui.transl8.lookup.MessageLookup;
+import net.chisui.transl8.lookup.MessageSource;
 
 /**
  * Interface for all Translators.
  */
 public interface Translator {
 
-	default String translate(Object obj) {
+	default String translate(final Object obj) {
 		if (obj instanceof TranslationHint) {
 			return translate((TranslationHint) obj);
 		} else if (obj instanceof Translatable) {
@@ -28,13 +29,13 @@ public interface Translator {
 		}
 	}
 
-	default String translate(Translatable translatable) {
+	default String translate(final Translatable translatable) {
 		return translate(translatable.getTranslationHint());
 	}
 
 	String translate(TranslationHint hint);
 
-	default String translate(Locale locale, Object obj) {
+	default String translate(final Locale locale, final Object obj) {
 		if (obj instanceof TranslationHint) {
 			return translate(locale, (TranslationHint) obj);
 		} else if (obj instanceof Translatable) {
@@ -46,13 +47,13 @@ public interface Translator {
 		}
 	}
 
-	default String translate(Locale locale, Translatable translatable) {
+	default String translate(final Locale locale, final Translatable translatable) {
 		return translate(locale, translatable.getTranslationHint());
 	}
 
 	String translate(Locale locale, TranslationHint hint);
 
-	default <A extends Appendable> A translate(A appendable, Object obj) throws IOException {
+	default <A extends Appendable> A translate(final A appendable, final Object obj) throws IOException {
 		if (obj instanceof TranslationHint) {
 			return translate(appendable, (TranslationHint) obj);
 		} else if (obj instanceof Translatable) {
@@ -64,13 +65,13 @@ public interface Translator {
 		}
 	}
 
-	default <A extends Appendable> A translate(A appendable, Translatable translatable) throws IOException {
+	default <A extends Appendable> A translate(final A appendable, final Translatable translatable) throws IOException {
 		return translate(appendable, translatable.getTranslationHint());
 	}
 
 	<A extends Appendable> A translate(A appendable, TranslationHint hint) throws IOException;
 
-	default <A extends Appendable> A translate(A appendable, Locale locale, Object obj) throws IOException {
+	default <A extends Appendable> A translate(final A appendable, final Locale locale, final Object obj) throws IOException {
 		if (obj instanceof TranslationHint) {
 			return translate(appendable, locale, (TranslationHint) obj);
 		} else if (obj instanceof Translatable) {
@@ -82,14 +83,14 @@ public interface Translator {
 		}
 	}
 
-	default <A extends Appendable> A translate(A appendable, Locale locale, Translatable translatable)
+	default <A extends Appendable> A translate(final A appendable, final Locale locale, final Translatable translatable)
 			throws IOException {
 		return translate(appendable, locale, translatable.getTranslationHint());
 	}
 
 	<A extends Appendable> A translate(A appendable, Locale locale, TranslationHint hint) throws IOException;
 	
-    default StringBuilder translate(StringBuilder appendable, Object obj) {
+    default StringBuilder translate(final StringBuilder appendable, final Object obj) {
         if (obj instanceof TranslationHint) {
             return translate(appendable, (TranslationHint) obj);
         } else if (obj instanceof Translatable) {
@@ -101,19 +102,19 @@ public interface Translator {
         }
     }
     
-    default StringBuilder translate(StringBuilder appendable, Translatable translatable) {
+    default StringBuilder translate(final StringBuilder appendable, final Translatable translatable) {
         return translate(appendable, translatable.getTranslationHint());
     }
     
-    default StringBuilder translate(StringBuilder appendable, TranslationHint hint) {
+    default StringBuilder translate(final StringBuilder appendable, final TranslationHint hint) {
     	try {
 			return (StringBuilder) translate((Appendable) appendable, hint);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new AssertionError("translating using StringBuilder threw an IOException", e);
 		}
     }
     
-    default StringBuilder translate(StringBuilder appendable, Locale locale, Object obj) {
+    default StringBuilder translate(final StringBuilder appendable, final Locale locale, final Object obj) {
         if (obj instanceof TranslationHint) {
             return translate(appendable, locale, (TranslationHint) obj);
         } else if (obj instanceof Translatable) {
@@ -125,14 +126,14 @@ public interface Translator {
         }
     }
     
-    default StringBuilder translate(StringBuilder appendable, Locale locale, Translatable translatable) {
+    default StringBuilder translate(final StringBuilder appendable, final Locale locale, final Translatable translatable) {
         return translate(appendable, locale, translatable.getTranslationHint());
     }
     
-    default StringBuilder translate(StringBuilder appendable, Locale locale, TranslationHint hint) {
+    default StringBuilder translate(final StringBuilder appendable, final Locale locale, final TranslationHint hint) {
     	try {
 			return (StringBuilder) translate((Appendable) appendable, locale, hint);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new AssertionError("translating using StringBuilder threw an IOException", e);
 		}
     }
@@ -146,59 +147,68 @@ public interface Translator {
 		}
 
 		@Override
-		public String translate(TranslationHint hint) {
+		public String translate(final TranslationHint hint) {
 			return translate(getDefaultLocale.get(), hint);
 		}
 
 		@Override
-		public <A extends Appendable> A translate(A appendable, TranslationHint hint) throws IOException {
+		public <A extends Appendable> A translate(
+				final A appendable, 
+				final TranslationHint hint) throws IOException {
 			return translate(appendable, getDefaultLocale.get(), hint);
 		}
 
 	}
 	
 	static StringFirstTranslator of(
-			Supplier<Locale> getDefaultLocale, 
-			BiFunction<Locale, TranslationHint, String> translate) {
+			final Supplier<Locale> getDefaultLocale, 
+			final TranslationFunction translate) {
 		return new StringFirstTranslator(getDefaultLocale, translate);
 	}
 	
 	static StringFirstTranslator of(
-			BiFunction<Locale, TranslationHint, String> translate) {
+			final TranslationFunction translate) {
 		return of(Locale::getDefault, translate);
+	}
+	
+	@FunctionalInterface
+	interface TranslationFunction {
+		
+		String translate(Locale locale, TranslationHint hint, Translator translator);
+		
 	}
 	
 	class StringFirstTranslator extends AbstractTranslator {
 
-		protected final BiFunction<Locale, TranslationHint, String> translate;
+		protected final TranslationFunction translate;
 
 		public StringFirstTranslator(
 				final Supplier<Locale> getDefaultLocale, 
-				final BiFunction<Locale, TranslationHint, String> translate) {
+				final TranslationFunction translate) {
 			super(getDefaultLocale);
 			this.translate = requireNonNull(translate);
 		}
 
 		@Override
-		public String translate(Locale locale, TranslationHint hint) {
-			return translate.apply(locale, hint);
+		public String translate(final Locale locale, final TranslationHint hint) {
+			return translate.translate(locale, hint, this);
 		}
 
 		@Override
-		public <A extends Appendable> A translate(A appendable, Locale locale, TranslationHint hint) throws IOException {
+		public <A extends Appendable> A translate(final A appendable, final Locale locale, final TranslationHint hint) throws IOException {
 			appendable.append(translate(locale, hint));
 			return appendable;
 		}
 	}
 	
 	static AppendableFirstTranslator of(
-			Supplier<Locale> getDefaultLocale, 
-			AppendingTranslationFunction translate) {
+			final Supplier<Locale> getDefaultLocale, 
+			final AppendingTranslationFunction translate) {
 		return new AppendableFirstTranslator(getDefaultLocale, translate);
 	}
 	
 	static AppendableFirstTranslator of(
-			AppendingTranslationFunction translate) {
+			final AppendingTranslationFunction translate) {
 		return of(Locale::getDefault, translate);
 	}
 	
@@ -214,23 +224,29 @@ public interface Translator {
 		protected final AppendingTranslationFunction translate;
 		
 		public AppendableFirstTranslator(
-				Supplier<Locale> getDefaultLocale, 
-				AppendingTranslationFunction translate) {
+				final Supplier<Locale> getDefaultLocale, 
+				final AppendingTranslationFunction translate) {
 			super(getDefaultLocale);
 			this.translate = requireNonNull(translate);
 		}
 
 		@Override
-		public String translate(Locale locale, TranslationHint hint) {
+		public String translate(final Locale locale, final TranslationHint hint) {
 			return translate(new StringBuilder(), locale, hint).toString();
 		}
 
 		@Override
-		public <A extends Appendable> A translate(A appendable, Locale locale, TranslationHint hint) throws IOException {
+		public <A extends Appendable> A translate(final A appendable, final Locale locale, final TranslationHint hint) throws IOException {
 			translate.translate(appendable, locale, hint, this);
 			return appendable;
 		}
 		
+	}
+
+	static Translator of(
+			final MessageSource messageSource,
+			final Format format) {
+		return of(MessageLookup.of(messageSource), format);
 	}
 
 	static Translator of(
@@ -241,16 +257,25 @@ public interface Translator {
 	
 	static Translator of(
 			final Supplier<Locale> getDefaultLocale,
+			final MessageSource messageSource,
+			final Format format) {
+		return of(getDefaultLocale, MessageLookup.of(messageSource), format);
+	}
+	
+	static Translator of(
+			final Supplier<Locale> getDefaultLocale,
 			final MessageLookup messageLookup,
 			final Format format) {
 		requireNonNull(getDefaultLocale);
 		requireNonNull(messageLookup);
 		requireNonNull(format);
 		return of(getDefaultLocale, (appendable, locale, hint, translator) -> {
-			String message = messageLookup.getMessage(locale, hint.getKey(), hint.getFallback());
-			Formatable formatable = format.toFormatable(locale, message);
+			final String message = messageLookup.getMessage(locale, hint.getKey(), hint.getFallback());
+			final Formatable formatable = format.toFormatable(locale, message);
 			formatable.format(appendable, hint.getArguments(), translator);
 		});
 	}
+	
+
 	
 }

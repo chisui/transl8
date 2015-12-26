@@ -24,7 +24,8 @@ public class FormatTest {
 	}
 
 	private void test(Format format, String message) throws IOException {
-		Translator translator = Translator.of((l, hint) -> hint.getFallback().orElse("world"));
+		Translator translator = Translator.of((l, hint, t) -> 
+				hint.getFallback().orElse("world"));
 		StringBuilder sb = new StringBuilder();
 		
 		format
