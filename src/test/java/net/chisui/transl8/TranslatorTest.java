@@ -4,13 +4,19 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
 import org.junit.Test;
+import org.junit.internal.Throwables;
+
+import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
 import mockit.Expectations;
 import mockit.Mocked;
@@ -574,8 +580,50 @@ public class TranslatorTest {
         assertThat(sb.toString(), is("hello world"));
     }
     
-
     @Test
+    public void testTranslateStringBuildereObjectTranslationHintError() throws Exception {
+    
+    	StringBuilder sb = new StringBuilder();
+    	TranslationHint hint = TranslationHint.of("key");
+    	Translator t = Translator.of((l, h, translator) -> {
+	    		rethrow(new IOException());
+	    		return "";
+	    	});
+    	
+    	
+        try {
+			t.translate(sb, hint);
+        } catch (AssertionError e) {
+        	return;
+        }
+        fail();
+    }
+    
+    @Test
+    public void testTranslateStringBuildereObjectLocaleTranslationHintError() throws Exception {
+    
+    	StringBuilder sb = new StringBuilder();
+    	TranslationHint hint = TranslationHint.of("key");
+    	Translator t = Translator.of((l, h, translator) -> {
+	    		rethrow(new IOException());
+	    		return "";
+	    	});
+    	
+    	
+        try {
+			t.translate(sb, Locale.CANADA, hint);
+        } catch (AssertionError e) {
+        	return;
+        }
+        fail();
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T extends Throwable> void rethrow(Throwable e) throws T {
+        throw (T) e;
+    }
+
+	@Test
     public void testTranslateStringBuildereObjectTranslatable(
             
         @Mocked Translatable translatable,
