@@ -13,10 +13,6 @@ import java.util.Locale;
 import java.util.Optional;
 
 import org.junit.Test;
-import org.junit.internal.Throwables;
-
-import com.google.common.base.Objects;
-import com.google.common.base.Preconditions;
 
 import mockit.Expectations;
 import mockit.Mocked;

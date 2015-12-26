@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 
 import java.io.IOException;
 import java.util.Locale;
-import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import net.chisui.transl8.format.Format;
@@ -13,10 +12,21 @@ import net.chisui.transl8.lookup.MessageLookup;
 import net.chisui.transl8.lookup.MessageSource;
 
 /**
- * Interface for all Translators.
+ * Interface for Translators that turn a {@link TranslationHint} into a {@link String} representation.
  */
 public interface Translator {
 
+	/**
+	 * Translates an arbitrary {@link Object} to {@link String}.
+	 * 
+	 * {@link TranslationHint TranslationHints} are translated using {@link #translate(TranslationHint)}.
+	 * {@link Translatable Translatables} are translated using {@link #translate(Translatable)}.
+	 * Otherwise a {@link TranslationHint} with the argument as key and its {@link String#valueOf(Object)} 
+	 * as fallback and translated using {@link #translate(TranslationHint)}.
+	 * 
+	 * @param obj to translate
+	 * @return the translation
+	 */
 	default String translate(final Object obj) {
 		if (obj instanceof TranslationHint) {
 			return translate((TranslationHint) obj);
@@ -29,12 +39,42 @@ public interface Translator {
 		}
 	}
 
+	/**
+	 * Translates a {@link Translatable} to {@link String}.
+	 * 
+	 * This passes the {@link TranslationHint} retrieved with {@link Translatable#getTranslationHint()} to 
+	 * {@link #translate(TranslationHint)}.
+	 * 
+	 * @param translatable to translate
+	 * @return the translation
+	 */
 	default String translate(final Translatable translatable) {
 		return translate(translatable.getTranslationHint());
 	}
 
+	/**
+	 * Translates a {@link TranslationHint} to {@link String}.
+	 * 
+	 * The {@link TranslationHint} may not be <code>null</code> otherwise a {@link NullPointerException} may
+	 * be thrown. The returned String is never <code>null</code>.
+	 * 
+	 * @param hint to translate
+	 * @return the translation
+	 */
 	String translate(TranslationHint hint);
 
+	/**
+	 * Translates an arbitrary {@link Object} to {@link String} relative to the provided {@link Locale}.
+	 * 
+	 * {@link TranslationHint TranslationHints} are translated using {@link #translate(Locale, TranslationHint)}.
+	 * {@link Translatable Translatables} are translated using {@link #translate(Locale, Translatable)}.
+	 * Otherwise a {@link TranslationHint} with the argument as key and its {@link String#valueOf(Object)} 
+	 * as fallback and translated using {@link #translate(Locale, TranslationHint)}.
+	 * 
+	 * @param locale of the translation
+	 * @param obj to translate
+	 * @return the translation
+	 */
 	default String translate(final Locale locale, final Object obj) {
 		if (obj instanceof TranslationHint) {
 			return translate(locale, (TranslationHint) obj);
@@ -47,12 +87,45 @@ public interface Translator {
 		}
 	}
 
+	/**
+	 * Translates a {@link Translatable} to {@link String} relative to the provided {@link Locale}.
+	 * 
+	 * This passes the {@link TranslationHint} retrieved with {@link Translatable#getTranslationHint()} to 
+	 * {@link #translate(Locale, TranslationHint)}.
+	 * 
+	 * @param locale of the translation
+	 * @param translatable to translate
+	 * @return the translation
+	 */
 	default String translate(final Locale locale, final Translatable translatable) {
 		return translate(locale, translatable.getTranslationHint());
 	}
 
+	/**
+	 * Translates a {@link TranslationHint} to {@link String} relative to the provided {@link Locale}.
+	 * 
+	 * The {@link TranslationHint} may not be <code>null</code> otherwise a {@link NullPointerException} may
+	 * be thrown. The returned String is never <code>null</code>.
+	 * 
+	 * @param locale of the translation
+	 * @param hint to translate
+	 * @return the translation
+	 */
 	String translate(Locale locale, TranslationHint hint);
 
+
+	/**
+	 * Translates an arbitrary {@link Object} and appends the translation to provided {@link Appendable}.
+	 * 
+	 * {@link TranslationHint TranslationHints} are translated using {@link #translate(Appendable, TranslationHint)}.
+	 * {@link Translatable Translatables} are translated using {@link #translate(Appendable, Translatable)}.
+	 * Otherwise a {@link TranslationHint} with the argument as key and its {@link String#valueOf(Object)} 
+	 * as fallback and translated using {@link #translate(Appendable, TranslationHint)}.
+	 * 
+	 * @param appendable to append translation to
+	 * @param obj to translate
+	 * @return the translation
+	 */
 	default <A extends Appendable> A translate(final A appendable, final Object obj) throws IOException {
 		if (obj instanceof TranslationHint) {
 			return translate(appendable, (TranslationHint) obj);
@@ -275,7 +348,5 @@ public interface Translator {
 			formatable.format(appendable, hint.getArguments(), translator);
 		});
 	}
-	
-
 	
 }

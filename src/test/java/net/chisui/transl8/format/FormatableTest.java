@@ -92,11 +92,12 @@ public class FormatableTest {
 	}
 	
 	@Test
-	public void testNoopThan() throws Exception {
-		
-		Formatable formatable = (a, args, t) -> {};
-
-		assertThat(Formatable.noop().than(formatable ), is(formatable));
+	public void testNoopThan(
+	
+		@Mocked Formatable formatable
+			
+	) throws Exception {
+		assertThat(Formatable.noop().than(formatable), is(formatable));
 	}
 	
 	@Test
