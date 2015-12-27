@@ -124,7 +124,7 @@ public interface Translator {
 	 * 
 	 * @param appendable to append translation to
 	 * @param obj to translate
-	 * @return the translation
+	 * @return the {@link Appendable}
 	 */
 	default <A extends Appendable> A translate(final A appendable, final Object obj) throws IOException {
 		if (obj instanceof TranslationHint) {
