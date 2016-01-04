@@ -90,13 +90,12 @@
         <version>0.7.5.201505241946</version>
         <executions>
           <execution>
-            <id>jacoco-initialize</id>
             <goals>
               <goal>prepare-agent</goal>
             </goals>
           </execution>
           <execution>
-            <id>jacoco-site</id>
+            <id>report</id>
             <phase>test</phase>
             <goals>
               <goal>report</goal>
