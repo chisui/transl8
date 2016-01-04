@@ -1,5 +1,5 @@
 # translate
-![travis badge](https://travis-ci.org/chisui/translate.svg?branch=master)[![Code Coverage](https://img.shields.io/codecov/c/github/chisui/translate/master.svg)](https://codecov.io/github/chisui/translate?branch=master)
+[![travis badge](https://travis-ci.org/chisui/translate.svg?branch=master)](https://travis-ci.org/chisui/translate)[![Code Coverage](https://img.shields.io/codecov/c/github/chisui/translate/master.svg)](https://codecov.io/github/chisui/translate?branch=master)
 
 functional java translation library
 
