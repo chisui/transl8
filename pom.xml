@@ -1,48 +1,49 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
-	     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-							 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>net.chisui.transl8</groupId>
+
+  <groupId>net.chisui.translate</groupId>
   <artifactId>translate</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   
-  <name>transl8</name>
+  <name>translate</name>
   <description>a functional translation library</description>
-  <url>https://github.com/chisui/transl8</url>
+  <url>https://github.com/chisui/translate</url>
   
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
-      <url>https://github.com/chisui/transl8/blob/master/LICENSE</url>
+      <url>https://github.com/chisui/translate/blob/master/LICENSE</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
-  
+
   <scm>
-    <connection>scm:git:https://github.com/chisui/transl8.git</connection>
+    <connection>scm:git:https://github.com/chisui/translate.git</connection>
     <developerConnection>${project.scm.connection}</developerConnection>
-    <url>https://github.com/chisui/transl8/tree/${project.scm.tag}</url>
+    <url>https://github.com/chisui/translate/tree/${project.scm.tag}</url>
     <tag>master</tag>
   </scm>
-  
+
   <issueManagement>
     <system>github</system>
-    <url>https://github.com/chisui/transl8/issues</url>
+    <url>https://github.com/chisui/translate/issues</url>
   </issueManagement>
   <ciManagement>
     <system>travis CI</system>
-    <url>https://travis-ci.org/chisui/transl8</url>
+    <url>https://travis-ci.org/chisui/translate</url>
   </ciManagement>
-  
+
   <properties>
-  	<!-- test -->
+    <!-- test -->
     <jmockit.version>1.20</jmockit.version>
     <hamcrest.version>2.0.0.0</hamcrest.version>
     <junit.version>4.12</junit.version>
   </properties>
-  
-  
+
+
   <dependencies>
     <!-- test -->
     <dependency>
@@ -52,10 +53,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-	  <groupId>junit</groupId>
-	  <artifactId>junit</artifactId>
-	  <version>${junit.version}</version>
-	  <scope>test</scope>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>${junit.version}</version>
+    <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
@@ -64,7 +65,7 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  
+
   <build>
     <plugins>
       <plugin>
