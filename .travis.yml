@@ -2,6 +2,9 @@ language: java
 jdk:
   - oraclejdk8
 
+script:
+  - mvn test -P test
+
 before_install:
   - pip install --user codecov
 after_success:
