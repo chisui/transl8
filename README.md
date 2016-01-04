@@ -1,5 +1,5 @@
-# transl8
-![travis badge](https://travis-ci.org/chisui/transl8.svg?branch=master)
+# translate
+![travis badge](https://travis-ci.org/chisui/translate.svg?branch=master)
 
 functional java translation library
 
