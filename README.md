@@ -2,7 +2,17 @@
 
 [![travis badge](https://img.shields.io/travis/chisui/translate.svg)](https://travis-ci.org/chisui/translate)[![Code Coverage](https://img.shields.io/codecov/c/github/chisui/translate/master.svg)](https://codecov.io/github/chisui/translate?branch=master)
 
-functional java translation library
+translate is a functional java translation library.
+
+To include it in your project using maven add the dependency:
+
+```xml
+<dependency>
+    <groupId>com.github.chisui.translate</groupId>
+    <artifactId>translate</artifactId>
+    <version>0.1.0</version>
+</dependency>
+```
 
 # Usage
 
