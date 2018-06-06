@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.github.chisui.translate.format.Format;
@@ -348,5 +349,15 @@ public interface Translator {
 			formatable.format(appendable, hint.getArguments(), translator);
 		});
 	}
+
+	static Translator fallbackTranslator() {
+        return fallbackTranslator(Format.ofMessageFormat());
+    }
+
+	static Translator fallbackTranslator(Format format) {
+        return of(
+                (anyLocale, anyKey) -> Optional.empty(),
+                format);
+    }
 	
 }
