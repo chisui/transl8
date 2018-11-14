@@ -1,6 +1,5 @@
 package com.github.chisui.translate.example;
 
-import com.github.chisui.translate.Translatable;
 import com.github.chisui.translate.TranslationHint;
 
 import static java.util.Objects.requireNonNull;
