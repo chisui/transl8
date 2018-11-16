@@ -17,7 +17,7 @@ public final class ClassTranslationKey<C> implements TranslationKey<ClassTransla
         return cls.getCanonicalName();
     }
 
-    public Class<C> getCls() {
+    public Class<C> cls() {
         return cls;
     }
 
