@@ -1,5 +1,7 @@
 package com.github.chisui.translate;
 
+import java.lang.reflect.Type;
+
 import static java.util.Objects.requireNonNull;
 
 
@@ -11,6 +13,10 @@ public final class ClassTranslationKey<C> implements TranslationKey<ClassTransla
         this.cls = requireNonNull(cls);
     }
 
+    @Override
+    public Type argType() {
+        return cls;
+    }
 
     @Override
     public String toKeyString() {

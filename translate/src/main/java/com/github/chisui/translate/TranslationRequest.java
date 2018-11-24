@@ -2,6 +2,7 @@ package com.github.chisui.translate;
 
 import static java.util.Objects.requireNonNull;
 
+@Value
 public final class TranslationRequest<K extends TranslationKey<K, ? super A>, A> {
 
     private final K key;

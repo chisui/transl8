@@ -1,95 +1,119 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.github.chisui.translate</groupId>
-  <artifactId>translate-parent</artifactId>
-  <version>0.2.0-SNAPSHOT</version>
-  
-  <packaging>pom</packaging>
-  <description>a functional translation library</description>
-  <url>https://github.com/chisui/translate</url>
+    <groupId>com.github.chisui.translate</groupId>
+    <artifactId>translate-parent</artifactId>
+    <version>0.2.0-SNAPSHOT</version>
 
-  <modules>
-    <module>translate</module>
-    <module>translate-verify</module>
-  </modules>
+    <packaging>pom</packaging>
+    <description>a functional translation library</description>
+    <url>https://github.com/chisui/translate</url>
 
-  <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
-  
-  <licenses>
-    <license>
-      <name>Apache License, Version 2.0</name>
-      <url>https://github.com/chisui/translate/blob/master/LICENSE</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
+    <modules>
+        <module>translate</module>
+        <module>translate-verify</module>
+    </modules>
 
-  <developers>
-    <developer>
-      <name>Philipp Dargel(chisui)</name>
-      <email>chisui@tzi.de</email>
-    </developer>
-  </developers>  
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
-  <scm>
-    <connection>scm:git:https://github.com/chisui/translate.git</connection>
-    <developerConnection>${project.scm.connection}</developerConnection>
-    <url>https://github.com/chisui/translate/tree/${project.scm.tag}</url>
-    <tag>master</tag>
-  </scm>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://github.com/chisui/translate/blob/master/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-  <issueManagement>
-    <system>github</system>
-    <url>https://github.com/chisui/translate/issues</url>
-  </issueManagement>
-  <ciManagement>
-    <system>travis CI</system>
-    <url>https://travis-ci.org/chisui/translate</url>
-  </ciManagement>
+    <developers>
+        <developer>
+            <name>Philipp Dargel(chisui)</name>
+            <email>chisui@tzi.de</email>
+        </developer>
+    </developers>
 
-  <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <scm>
+        <connection>scm:git:https://github.com/chisui/translate.git</connection>
+        <developerConnection>${project.scm.connection}</developerConnection>
+        <url>https://github.com/chisui/translate/tree/${project.scm.tag}</url>
+        <tag>master</tag>
+    </scm>
 
-    <project.scm.id>github</project.scm.id>
-    <!-- test -->
-    <jmockit.version>1.20</jmockit.version>
-    <hamcrest.version>2.0.0.0</hamcrest.version>
-    <junit.version>4.12</junit.version>
-  </properties>
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/chisui/translate/issues</url>
+    </issueManagement>
+    <ciManagement>
+        <system>travis CI</system>
+        <url>https://travis-ci.org/chisui/translate</url>
+    </ciManagement>
 
-  <dependencyManagement>
-    <dependencies>
-      <!-- test -->
-    <dependency>
-      <groupId>org.jmockit</groupId>
-      <artifactId>jmockit</artifactId>
-      <version>${jmockit.version}</version>
-      <scope>test</scope>
-    </dependency>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-junit</artifactId>
-      <version>${hamcrest.version}</version>
-      <scope>test</scope>
-    </dependency>
-    </dependencies>
-  </dependencyManagement>
+        <project.scm.id>github</project.scm.id>
+        <!-- test -->
+        <jmockit.version>1.20</jmockit.version>
+        <hamcrest.version>2.0.0.0</hamcrest.version>
+        <junit.version>4.12</junit.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.github.chisui.translate</groupId>
+                <artifactId>translate</artifactId>
+                <version>0.2.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.chisui.translate</groupId>
+                <artifactId>translate-verify</artifactId>
+                <version>0.2.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>27.0-jre</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>0.9.11</version>
+            </dependency>
+
+            <!-- test -->
+            <dependency>
+                <groupId>org.jmockit</groupId>
+                <artifactId>jmockit</artifactId>
+                <version>${jmockit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>3.11.1</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>

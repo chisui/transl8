@@ -1,6 +1,12 @@
 package com.github.chisui.translate;
 
-public interface TranslationKey<SELF extends TranslationKey<SELF, A>, A> extends TranslationKeyBase<SELF> {
+import java.lang.reflect.Type;
+
+public interface TranslationKey<SELF extends TranslationKey<SELF, A>, A> {
+
+    Type argType();
+
+    String toKeyString();
 
     @SuppressWarnings({
             "unchecked", // c.getClass() always returns a Class<C>, but java's type system sucks bigtime.
