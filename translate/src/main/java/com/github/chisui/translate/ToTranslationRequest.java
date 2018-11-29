@@ -3,6 +3,10 @@ package com.github.chisui.translate;
 
 public final class ToTranslationRequest implements TranslationFunction<TranslationRequest<?, ?>> {
 
+    public static final ToTranslationRequest INSTANCE = new ToTranslationRequest();
+
+    private ToTranslationRequest() {}
+
     @Override
     public <K extends TranslationKey<K, A>, A> TranslationRequest<K, A> apply(TranslationRequest<K, A> req) {
         return req;
@@ -11,6 +15,11 @@ public final class ToTranslationRequest implements TranslationFunction<Translati
     @Override
     public <T extends Translatable> TranslationRequest<ClassTranslationKey<T>, T> apply(T t) {
         return apply(TranslationKey.of(t), t);
+    }
+
+    @Override
+    public <K extends TranslationKey<K, Void>> TranslationRequest<K, Void> apply(K key) {
+        return apply(key, null);
     }
 
     @SuppressWarnings({

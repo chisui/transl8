@@ -10,6 +10,10 @@ public interface TranslationFunction<R> {
         return apply(TranslationKey.of(t), t);
     }
 
+    default <K extends TranslationKey<K, Void>> R apply(K key) {
+        return apply(key, null);
+    }
+
     @SuppressWarnings({
             "unchecked", // unchecked cast to actually call non varargs format method.
             "rawtype", // cast through rawtype to let key accept A... instead of A[].
