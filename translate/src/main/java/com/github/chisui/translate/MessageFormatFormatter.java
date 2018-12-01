@@ -98,8 +98,8 @@ public final class MessageFormatFormatter<A> implements Formatter<A, String> {
     public boolean acceptsArgumentsOfType(Type type) {
         Class<?> cls = toClass(type);
         return cls.isArray()
-            || Iterable.class.isAssignableFrom(cls)
-            || (new MessageFormat(message).getFormats().length == 0 && Void.class.equals(cls));
+                || Iterable.class.isAssignableFrom(cls)
+                || (new MessageFormat(message).getFormats().length == 0 && Void.class.equals(cls));
     }
 
     @Override

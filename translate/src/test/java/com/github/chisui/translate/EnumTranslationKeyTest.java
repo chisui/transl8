@@ -35,13 +35,13 @@ public class EnumTranslationKeyTest {
     @Test
     public void testEnumImpl() {
         assertThat(TestEnumKey.HELLO.toKeyString())
-            .isEqualTo("com.github.chisui.translate.EnumTranslationKeyTest.TestEnumKey.hello");
+                .isEqualTo("com.github.chisui.translate.EnumTranslationKeyTest.TestEnumKey.hello");
     }
 
     @Test
     public void testEnumOverrideConst() {
         assertThat(TestEnumKey.GOODBYE.toKeyString())
-            .isEqualTo("com.github.chisui.translate.EnumTranslationKeyTest.TestEnumKey.override");
+                .isEqualTo("com.github.chisui.translate.EnumTranslationKeyTest.TestEnumKey.override");
     }
 
     @Test
@@ -75,7 +75,9 @@ public class EnumTranslationKeyTest {
     }
 
     @SuppressWarnings("rawtype")
-    private enum RawTypeKey implements EnumTranslationKey { SOME_CONST }
+    private enum RawTypeKey implements EnumTranslationKey {
+        SOME_CONST
+    }
 
     @Test(expected = IllegalStateException.class)
     public void testArgTypeRawTypeImplementation() {

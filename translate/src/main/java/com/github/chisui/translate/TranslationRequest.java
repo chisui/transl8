@@ -28,14 +28,19 @@ public final class TranslationRequest<K extends TranslationKey<K, ? super A>, A>
         return new TranslationRequest<>(key, arg);
     }
 
-    public final K key() { return key; }
-    public final A arg() { return arg; }
+    public final K key() {
+        return key;
+    }
+
+    public final A arg() {
+        return arg;
+    }
 
     @Override
     public String toString() {
         return "TranslationRequest{"
                 + "key=" + key.toKeyString()
-                + (arg == null ? "": ", arg=" + ObjectUtils.toString(arg))
+                + (arg == null ? "" : ", arg=" + ObjectUtils.toString(arg))
                 + '}';
     }
 

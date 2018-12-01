@@ -10,8 +10,8 @@ import static com.github.chisui.translate.DefaultKeyToString.defaultToKeyString;
 import static java.util.Arrays.asList;
 
 public interface EnumTranslationKey<
-    SELF extends Enum<SELF> & EnumTranslationKey<SELF, A>,
-    A> extends TranslationKey<SELF, A> {
+        SELF extends Enum<SELF> & EnumTranslationKey<SELF, A>,
+        A> extends TranslationKey<SELF, A> {
 
     default Type argType() {
         Queue<Type> clss = new LinkedList<>(asList(getClass().getGenericInterfaces()));
@@ -23,7 +23,7 @@ public interface EnumTranslationKey<
                     return p.getActualTypeArguments()[1];
                 } else {
                     Arrays.stream(((Class<?>) p.getRawType()).getGenericInterfaces())
-                        .forEach(clss::offer);
+                            .forEach(clss::offer);
                 }
             } else {
                 break;

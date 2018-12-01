@@ -1,6 +1,9 @@
 package com.github.chisui.translate;
 
-import java.util.*;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.function.BiFunction;
 
 import static java.util.Objects.requireNonNull;

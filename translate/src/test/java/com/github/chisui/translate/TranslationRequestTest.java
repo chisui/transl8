@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static com.github.chisui.translate.EnumTranslationKeyTest.TestEnumKey.HELLO;
 import static com.github.chisui.translate.EnumTranslationKeyTest.TestEnumWithOverride.SOME_CONST;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class TranslationRequestTest {
 
@@ -17,7 +17,7 @@ public class TranslationRequestTest {
     @Test
     public void testToString() {
         assertEquals("TranslationRequest{key=com.github.chisui.translate.EnumTranslationKeyTest.TestEnumKey.hello, arg=[a, b]}",
-                TranslationRequest.of(HELLO, new String[]{ "a", "b"}).toString());
+                TranslationRequest.of(HELLO, new String[]{"a", "b"}).toString());
     }
 
     @Test

@@ -12,8 +12,15 @@ public class DefaultKeyToStringTest {
     private static final int ENUM_CTR_MODIFIER_MAGIC_NUMBER = 16384;
 
     private static final class BrokenTranslationKey implements TranslationKey<BrokenTranslationKey, Long> {
-        @Override public Type argType() { return null; }
-        @Override public String toKeyString() { return null; }
+        @Override
+        public Type argType() {
+            return null;
+        }
+
+        @Override
+        public String toKeyString() {
+            return null;
+        }
     }
 
     @Test
@@ -29,6 +36,7 @@ public class DefaultKeyToStringTest {
 
     private enum BrokenEnum implements EnumTranslationKey<BrokenEnum, Void> {
         BROKEN;
+
         static {
             try {
                 // intentionally breaking the name part of the Enum constant to simulate broken bytecode.

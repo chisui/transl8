@@ -6,7 +6,7 @@ import java.util.MissingResourceException;
 import java.util.Optional;
 
 import static java.util.Locale.ENGLISH;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ResourceBundleMessageSourceTest {
 

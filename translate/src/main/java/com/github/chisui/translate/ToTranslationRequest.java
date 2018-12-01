@@ -5,7 +5,8 @@ public final class ToTranslationRequest implements TranslationFunction<Translati
 
     public static final ToTranslationRequest INSTANCE = new ToTranslationRequest();
 
-    private ToTranslationRequest() {}
+    private ToTranslationRequest() {
+    }
 
     @Override
     public <K extends TranslationKey<K, A>, A> TranslationRequest<K, A> apply(TranslationRequest<K, A> req) {

@@ -5,7 +5,8 @@ import org.junit.Test;
 import java.util.Locale;
 
 import static com.github.chisui.translate.EnumTranslationKeyTest.TestEnumWithOverride.SOME_CONST;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class TranslatorTest {
 
@@ -15,7 +16,7 @@ public class TranslatorTest {
 
     private Object[] capture;
     private Translator<String> translator = Translator.ofUnsafe((l, k, a) -> {
-        capture = new Object[]{ l, k, a };
+        capture = new Object[]{l, k, a};
         return "hello";
     });
 
@@ -76,7 +77,7 @@ public class TranslatorTest {
                 Locale.GERMAN,
                 REQ.key(),
                 REQ.arg(),
-        },capture);
+        }, capture);
     }
 
     @Test
@@ -86,7 +87,7 @@ public class TranslatorTest {
                 Locale.GERMAN,
                 TranslationKey.of(TRANSLATABLE),
                 TRANSLATABLE,
-        },capture);
+        }, capture);
     }
 
     @Test
@@ -96,7 +97,7 @@ public class TranslatorTest {
                 Locale.GERMAN,
                 SOME_CONST,
                 null,
-        },capture);
+        }, capture);
     }
 
     @Test
@@ -107,7 +108,7 @@ public class TranslatorTest {
         assertArrayEquals(new String[]{"hello", "world"}, (Object[]) capture[2]);
     }
 
-    enum SomeEnum implements EnumTranslationKey<SomeEnum, Long> { KEY }
+    enum SomeEnum implements EnumTranslationKey<SomeEnum, Long> {KEY}
 
     @Test
     public void testApplyLocaleKeyArg() {
@@ -116,7 +117,7 @@ public class TranslatorTest {
                 Locale.GERMAN,
                 SomeEnum.KEY,
                 42L,
-        },capture);
+        }, capture);
     }
 
     @Test
@@ -126,7 +127,7 @@ public class TranslatorTest {
                 Locale.GERMAN,
                 REQ.key(),
                 REQ.arg(),
-        },capture);
+        }, capture);
     }
 
     @Test
@@ -136,7 +137,7 @@ public class TranslatorTest {
                 Locale.GERMAN,
                 TranslationKey.of(TRANSLATABLE),
                 TRANSLATABLE,
-        },capture);
+        }, capture);
     }
 
     @Test
@@ -146,7 +147,7 @@ public class TranslatorTest {
                 Locale.GERMAN,
                 SOME_CONST,
                 null,
-        },capture);
+        }, capture);
     }
 
     @Test
@@ -164,7 +165,7 @@ public class TranslatorTest {
                 Locale.GERMAN,
                 SomeEnum.KEY,
                 42L,
-        },capture);
+        }, capture);
     }
 
     private void withDefaultLocale(Locale locale, Runnable action) {

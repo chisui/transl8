@@ -1,7 +1,10 @@
 package com.github.chisui.translate;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Optional;
+import java.util.Queue;
 
 import static java.util.Collections.singletonList;
 
@@ -9,7 +12,8 @@ public final class DefaultKeyToString implements KeyToString {
 
     private static final DefaultKeyToString INSTANCE = new DefaultKeyToString();
 
-    private DefaultKeyToString() {}
+    private DefaultKeyToString() {
+    }
 
     public static DefaultKeyToString instance() {
         return INSTANCE;

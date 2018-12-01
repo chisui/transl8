@@ -1,12 +1,12 @@
 package com.github.chisui.translate;
 
+import com.github.chisui.translate.EnumTranslationKeyTest.TestEnumKey;
 import org.junit.Test;
 
 import static com.github.chisui.translate.EnumTranslationKeyTest.TestEnumIndirect.SOME_CONST;
 import static com.github.chisui.translate.EnumTranslationKeyTest.TestEnumKey.HELLO;
-import static org.junit.Assert.*;
-
-import com.github.chisui.translate.EnumTranslationKeyTest.TestEnumKey;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 public class ToTranslationRequestTest implements Translatable {
 
