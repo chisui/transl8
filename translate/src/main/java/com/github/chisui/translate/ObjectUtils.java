@@ -1,6 +1,14 @@
 package com.github.chisui.translate;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Spliterators;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public final class ObjectUtils {
     private ObjectUtils() {}
@@ -60,6 +68,82 @@ public final class ObjectUtils {
             return Arrays.toString((Object[]) obj);
         } else {
             return obj.toString();
+        }
+    }
+
+    public static Object[] toArrayUnsafe(Object obj) {
+        Object[] objs;
+        if(obj instanceof Object[]) {
+            return (Object[]) obj;
+        } else if (obj instanceof Collection) {
+            objs = new Object[((Collection) obj).size()];
+            int i = 0;
+            for (Object o : (Collection<?>) obj) {
+                objs[i++] = o;
+            }
+        } else if (obj instanceof Iterable) {
+            return StreamSupport.stream(((Iterable) obj).spliterator(), false).toArray();
+        } else if(obj instanceof long[]) {
+            long[] arr = (long[]) obj;
+            objs = new Object[arr.length];
+            for (int i = 0; i < arr.length; i++) {
+                objs[i] = arr[i];
+            }
+        } else if(obj instanceof int[]) {
+            int[] arr = (int[]) obj;
+            objs = new Object[arr.length];
+            for (int i = 0; i < arr.length; i++) {
+                objs[i] = arr[i];
+            }
+        } else if(obj instanceof short[]) {
+            short[] arr = (short[]) obj;
+            objs = new Object[arr.length];
+            for (int i = 0; i < arr.length; i++) {
+                objs[i] = arr[i];
+            }
+        } else if(obj instanceof char[]) {
+            char[] arr = (char[]) obj;
+            objs = new Object[arr.length];
+            for (int i = 0; i < arr.length; i++) {
+                objs[i] = arr[i];
+            }
+        } else if(obj instanceof byte[]) {
+            byte[] arr = (byte[]) obj;
+            objs = new Object[arr.length];
+            for (int i = 0; i < arr.length; i++) {
+                objs[i] = arr[i];
+            }
+        } else if(obj instanceof boolean[]) {
+            boolean[] arr = (boolean[]) obj;
+            objs = new Object[arr.length];
+            for (int i = 0; i < arr.length; i++) {
+                objs[i] = arr[i];
+            }
+        } else if(obj instanceof double[]) {
+            double[] arr = (double[]) obj;
+            objs = new Object[arr.length];
+            for (int i = 0; i < arr.length; i++) {
+                objs[i] = arr[i];
+            }
+        } else if(obj instanceof float[]) {
+            float[] arr = (float[]) obj;
+            objs = new Object[arr.length];
+            for (int i = 0; i < arr.length; i++) {
+                objs[i] = arr[i];
+            }
+        } else {
+            objs = new Object[]{ obj };
+        }
+        return objs;
+    }
+
+    public static Class<?> toClass(Type t) {
+        if (t instanceof Class) {
+            return (Class<?>) t;
+        } else if (t instanceof ParameterizedType) {
+            return toClass(((ParameterizedType) t).getRawType());
+        } else {
+            throw new IllegalArgumentException("can not turn " + t + " into a class");
         }
     }
 }
