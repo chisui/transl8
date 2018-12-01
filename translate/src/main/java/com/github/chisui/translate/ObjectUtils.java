@@ -1,13 +1,7 @@
 package com.github.chisui.translate;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Spliterators;
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public final class ObjectUtils {
@@ -137,13 +131,4 @@ public final class ObjectUtils {
         return objs;
     }
 
-    public static Class<?> toClass(Type t) {
-        if (t instanceof Class) {
-            return (Class<?>) t;
-        } else if (t instanceof ParameterizedType) {
-            return toClass(((ParameterizedType) t).getRawType());
-        } else {
-            throw new IllegalArgumentException("can not turn " + t + " into a class");
-        }
-    }
 }

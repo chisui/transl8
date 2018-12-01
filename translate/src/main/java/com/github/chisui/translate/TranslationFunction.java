@@ -1,5 +1,7 @@
 package com.github.chisui.translate;
 
+import java.util.function.BiFunction;
+
 public interface TranslationFunction<R> {
 
     default <K extends TranslationKey<K, A>, A> R apply(TranslationRequest<K, A> req) {
@@ -24,4 +26,7 @@ public interface TranslationFunction<R> {
 
     <K extends TranslationKey<K, A>, A> R apply(K key, A arg);
 
+    static <R> TranslationFunction<R> fromUnsafe(BiFunction<? super TranslationKey<?, ?>, Object, R> f) {
+        return f::apply;
+    }
 }
