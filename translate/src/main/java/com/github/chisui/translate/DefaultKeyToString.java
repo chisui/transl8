@@ -62,6 +62,7 @@ public final class DefaultKeyToString implements KeyToString {
             } else {
                 Arrays.stream(c.getInterfaces())
                         .forEach(clss::offer);
+                clss.offer(c.getSuperclass());
             }
         }
         return Optional.empty();
