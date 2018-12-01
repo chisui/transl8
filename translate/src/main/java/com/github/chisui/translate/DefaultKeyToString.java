@@ -7,6 +7,13 @@ import static java.util.Collections.singletonList;
 
 public final class DefaultKeyToString implements KeyToString {
 
+    private static final DefaultKeyToString INSTANCE = new DefaultKeyToString();
+
+    private DefaultKeyToString() {}
+
+    public static DefaultKeyToString instance() {
+        return INSTANCE;
+    }
 
     @Override
     public <SELF extends TranslationKey<SELF, A>, A> String toKeyString(TranslationKey<SELF, A> key) {
@@ -19,12 +26,10 @@ public final class DefaultKeyToString implements KeyToString {
             Field enumConstantField = enumConstantField((Enum<?>) key);
             String enumStr = Optional.ofNullable(enumConstantField.getDeclaredAnnotation(TranslationOverride.class))
                     .map(TranslationOverride::value)
-                    .orElseGet(((Enum) key)::name);
+                    .orElseGet(() -> ((Enum) key).name().toLowerCase());
             return baseStr + "." + enumStr;
-        } else if (key instanceof ClassTranslationKey) {
-            return baseStr;
         } else {
-            throw new IllegalArgumentException("can not determine key string of " + key);
+            return baseStr;
         }
     }
 
@@ -33,8 +38,7 @@ public final class DefaultKeyToString implements KeyToString {
             return constant.getClass().getField(constant.name());
         } catch (NoSuchFieldException e) {
             // Can only occur if reflection is diabled or maybe if the bytecode was edited?
-            throw new IllegalStateException(
-                    "expected enum constant but got " + constant + " of type " + constant.getClass(), e);
+            throw new IllegalStateException("expected enum constant but got " + constant + " of type " + constant.getClass(), e);
         }
     }
 

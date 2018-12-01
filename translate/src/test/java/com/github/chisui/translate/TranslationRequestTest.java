@@ -11,12 +11,12 @@ public class TranslationRequestTest {
 
     @Test
     public void testToStringVoid() {
-        assertEquals("TranslationRequest{key=enum.SOME_CONST}", TranslationRequest.of(SOME_CONST).toString());
+        assertEquals("TranslationRequest{key=enum.some_const}", TranslationRequest.of(SOME_CONST).toString());
     }
 
     @Test
     public void testToString() {
-        assertEquals("TranslationRequest{key=com.github.chisui.translate.EnumTranslationKeyTest.TestEnumKey.HELLO, arg=[a, b]}",
+        assertEquals("TranslationRequest{key=com.github.chisui.translate.EnumTranslationKeyTest.TestEnumKey.hello, arg=[a, b]}",
                 TranslationRequest.of(HELLO, new String[]{ "a", "b"}).toString());
     }
 

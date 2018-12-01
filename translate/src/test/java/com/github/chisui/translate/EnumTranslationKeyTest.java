@@ -35,7 +35,7 @@ public class EnumTranslationKeyTest {
     @Test
     public void testEnumImpl() {
         assertThat(TestEnumKey.HELLO.toKeyString())
-            .isEqualTo("com.github.chisui.translate.EnumTranslationKeyTest.TestEnumKey.HELLO");
+            .isEqualTo("com.github.chisui.translate.EnumTranslationKeyTest.TestEnumKey.hello");
     }
 
     @Test
@@ -47,19 +47,19 @@ public class EnumTranslationKeyTest {
     @Test
     public void testEnumOverride() {
         assertThat(TestEnumWithOverride.SOME_CONST.toKeyString())
-                .isEqualTo("enum.SOME_CONST");
+                .isEqualTo("enum.some_const");
     }
 
     @Test
     public void testEnumOverridePrefix() {
         assertThat(TestEnumWithOverridePrefix.SOME_CONST.toKeyString())
-                .isEqualTo("pre.TestEnumWithOverridePrefix.SOME_CONST");
+                .isEqualTo("pre.TestEnumWithOverridePrefix.some_const");
     }
 
     @Test
     public void testEnumOverrideIndirect() {
         assertThat(TestEnumIndirect.SOME_CONST.toKeyString())
-                .isEqualTo("super.TestEnumIndirect.SOME_CONST");
+                .isEqualTo("super.TestEnumIndirect.some_const");
     }
 
     @Test
@@ -72,5 +72,13 @@ public class EnumTranslationKeyTest {
     public void testArgTypeInirect() {
         assertThat(TestEnumIndirect.SOME_CONST.argType())
                 .isEqualTo(Void.class);
+    }
+
+    @SuppressWarnings("rawtype")
+    private enum RawTypeKey implements EnumTranslationKey { SOME_CONST }
+
+    @Test(expected = IllegalStateException.class)
+    public void testArgTypeRawTypeImplementation() {
+        RawTypeKey.SOME_CONST.argType();
     }
 }

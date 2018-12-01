@@ -47,4 +47,9 @@ public final class ClassTranslationKey<C extends Translatable> implements Transl
     public int hashCode() {
         return cls.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "ClassTranslationKey(" + cls.getCanonicalName() + ":" + toKeyString() + ')';
+    }
 }

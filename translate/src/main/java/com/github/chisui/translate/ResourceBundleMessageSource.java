@@ -5,7 +5,7 @@ import java.util.function.BiFunction;
 
 import static java.util.Objects.requireNonNull;
 
-public final class ResourceBundleMessageSource implements BiFunction<Locale, String, Optional<String>> {
+public final class ResourceBundleMessageSource implements BiFunction<Locale, String, String> {
 
     private final String bundleName;
 
@@ -24,11 +24,7 @@ public final class ResourceBundleMessageSource implements BiFunction<Locale, Str
     }
 
     @Override
-    public Optional<String> apply(Locale locale, String key) {
-        return Optional.of(ResourceBundle.getBundle(bundleName, locale))
-                .filter(bundle -> bundle.containsKey(key)) // prevent ResourceNotFoundException
-                .map(bundle -> bundle.getObject(key))
-                .filter(String.class::isInstance)
-                .map(String.class::cast);
+    public String apply(Locale locale, String key) {
+        return ResourceBundle.getBundle(bundleName, locale).getString(key);
     }
 }

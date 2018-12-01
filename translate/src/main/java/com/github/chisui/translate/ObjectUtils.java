@@ -1,5 +1,7 @@
 package com.github.chisui.translate;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.StreamSupport;
@@ -65,6 +67,9 @@ public final class ObjectUtils {
         }
     }
 
+    @SuppressWarnings({
+            "unchecked", "rawtypes"
+    })
     public static Object[] toArrayUnsafe(Object obj) {
         Object[] objs;
         if(obj instanceof Object[]) {
@@ -76,7 +81,9 @@ public final class ObjectUtils {
                 objs[i++] = o;
             }
         } else if (obj instanceof Iterable) {
-            return StreamSupport.stream(((Iterable) obj).spliterator(), false).toArray();
+            return StreamSupport
+                    .stream(((Iterable) obj).spliterator(), false)
+                    .toArray();
         } else if(obj instanceof long[]) {
             long[] arr = (long[]) obj;
             objs = new Object[arr.length];
@@ -126,9 +133,18 @@ public final class ObjectUtils {
                 objs[i] = arr[i];
             }
         } else {
-            objs = new Object[]{ obj };
+            throw new IllegalArgumentException("expected array or Iterable but got " + obj);
         }
         return objs;
     }
 
+    public static Class<?> toClass(Type t) {
+        if (t instanceof Class) {
+            return (Class<?>) t;
+        } else if (t instanceof ParameterizedType) {
+            return toClass(((ParameterizedType) t).getRawType());
+        } else {
+            throw new IllegalArgumentException("can not turn " + t + " into a class");
+        }
+    }
 }

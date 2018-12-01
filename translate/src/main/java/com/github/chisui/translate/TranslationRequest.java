@@ -20,6 +20,10 @@ public final class TranslationRequest<K extends TranslationKey<K, ? super A>, A>
         return of(key, null);
     }
 
+    public static <K extends TranslationKey<K, ? super A[]>, A> TranslationRequest<K, A[]> of(K key, A... args) {
+        return new TranslationRequest<>(key, args);
+    }
+
     public static <K extends TranslationKey<K, ? super A>, A> TranslationRequest<K, A> of(K key, A arg) {
         return new TranslationRequest<>(key, arg);
     }

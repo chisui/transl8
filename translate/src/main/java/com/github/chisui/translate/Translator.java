@@ -1,6 +1,9 @@
 package com.github.chisui.translate;
 
 import java.util.Locale;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
 
 public interface Translator<R> extends TranslationFunction<R> {
 
@@ -37,5 +40,23 @@ public interface Translator<R> extends TranslationFunction<R> {
     default Translator<R> bindLocale(Locale locale) {
         return BoundLocaleTranslator.of(this, locale);
     }
+
+    static <R> Translator<R> ofUnsafe(TriFunction<Locale, TranslationKey<?, ?>, Object, R> f) {
+        return f::apply;
+    }
+
+    static <T, R> ComposedTranslator<T, R> of(
+            KeyToString keyToString,
+            BiFunction<? super Locale, ? super String, T> messageSource,
+            Function<? super T, ? extends Formatter<Object, R>> toFormatter) {
+        return new ComposedTranslator<>(keyToString, messageSource, toFormatter);
+    }
+
+    static <T, R> ComposedTranslator<T, R> of(
+            BiFunction<? super Locale, ? super String, T> messageSource,
+            Function<? super T, ? extends Formatter<Object, R>> toFormatter) {
+        return of(DefaultKeyToString.instance(), messageSource, toFormatter);
+    }
+
 
 }

@@ -2,6 +2,7 @@ package com.github.chisui.translate;
 
 import org.junit.Test;
 
+import java.util.MissingResourceException;
 import java.util.Optional;
 
 import static java.util.Locale.ENGLISH;
@@ -13,12 +14,12 @@ public class ResourceBundleMessageSourceTest {
 
     @Test
     public void testKeyPresent() {
-        assertEquals(Optional.of("hello"), classUnderTest.apply(ENGLISH, "hello"));
+        assertEquals("hello", classUnderTest.apply(ENGLISH, "hello"));
     }
 
-    @Test
+    @Test(expected = MissingResourceException.class)
     public void testKeyAbsent() {
-        assertEquals(Optional.empty(), classUnderTest.apply(ENGLISH, "goodbye"));
+        classUnderTest.apply(ENGLISH, "goodbye");
     }
 
     @Test

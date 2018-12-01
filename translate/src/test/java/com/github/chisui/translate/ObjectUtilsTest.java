@@ -1,13 +1,17 @@
 package com.github.chisui.translate;
 
+import jdk.internal.org.objectweb.asm.TypeReference;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.BiFunction;
 
 import static org.junit.Assert.*;
 
@@ -33,29 +37,29 @@ public class ObjectUtilsTest {
 
     Object[][] vals() {
         return new Object[][]{
-                {null, "null"},
-                {"a", "a"},
-                {"b", "b"},
-                {new long[]{1}, "[1]"},
-                {new long[]{2}, "[2]"},
-                {new int[]{1}, "[1]"},
-                {new int[]{2}, "[2]"},
-                {new short[]{1}, "[1]"},
-                {new short[]{2}, "[2]"},
-                {new char[]{'a'}, "[a]"},
-                {new char[]{'b'}, "[b]"},
-                {new byte[]{1}, "[1]"},
-                {new byte[]{2}, "[2]"},
-                {new boolean[]{true}, "[true]"},
-                {new boolean[]{false}, "[false]"},
-                {new double[]{1.0}, "[1.0]"},
-                {new double[]{2.0}, "[2.0]"},
-                {new float[]{1.0f}, "[1.0]"},
-                {new float[]{2.0f}, "[2.0]"},
-                {new Object[]{BigDecimal.TEN}, "[10]"},
-                {new Object[]{BigDecimal.ONE}, "[1]"},
-                {new String[]{"a"}, "[a]"},
-                {new String[]{"b"}, "[b]"},
+                {null, "null", null},
+                {"a", "a", null},
+                {"b", "b", null},
+                {new long[]{1}, "[1]", new Object[] { 1L }},
+                {new long[]{2}, "[2]", new Object[] { 2L }},
+                {new int[]{1}, "[1]", new Object[] { 1 }},
+                {new int[]{2}, "[2]", new Object[] { 2 }},
+                {new short[]{1}, "[1]", new Object[] { (short) 1 }},
+                {new short[]{2}, "[2]", new Object[] { (short) 2 }},
+                {new char[]{'a'}, "[a]", new Object[] { 'a' }},
+                {new char[]{'b'}, "[b]", new Object[] { 'b' }},
+                {new byte[]{1}, "[1]", new Object[] { (byte) 1 }},
+                {new byte[]{2}, "[2]", new Object[] { (byte) 2 }},
+                {new boolean[]{true}, "[true]", new Object[] { true }},
+                {new boolean[]{false}, "[false]", new Object[] { false }},
+                {new double[]{1.0}, "[1.0]", new Object[] { 1.0 }},
+                {new double[]{2.0}, "[2.0]", new Object[] { 2.0 }},
+                {new float[]{1.0f}, "[1.0]", new Object[] { (float) 1.0 }},
+                {new float[]{2.0f}, "[2.0]", new Object[] { (float) 2.0 }},
+                {new Object[]{BigDecimal.TEN}, "[10]", new Object[] {BigDecimal.TEN}},
+                {new Object[]{BigDecimal.ONE}, "[1]", new Object[] { BigDecimal.ONE }},
+                {new String[]{"a"}, "[a]", new Object[] { "a" }},
+                {new String[]{"b"}, "[b]", new Object[] { "b" }},
         };
     }
 
@@ -67,7 +71,42 @@ public class ObjectUtilsTest {
 
     @Test
     @Parameters(method = "vals")
-    public void testToString(Object obj, String str) {
+    public void testToString(Object obj, String str, Object[] unused) {
         assertEquals(str, ObjectUtils.toString(obj));
+    }
+
+    @Test
+    @Parameters(method = "vals")
+    public void testToArrayUnsafe(Object obj, String unused, Object[] expected) {
+        if (expected != null) {
+            assertArrayEquals(expected, ObjectUtils.toArrayUnsafe(obj));
+        } else {
+            try {
+                ObjectUtils.toArrayUnsafe(obj);
+                fail("expected IllegalArgumentException");
+            } catch (IllegalArgumentException e) {
+
+            }
+        }
+    }
+
+    @Test
+    public void testToClassClass() {
+        assertEquals(String.class, ObjectUtils.toClass(String.class));
+    }
+
+    public List<String> boundGenericType(){return null;}
+
+    @Test
+    public void testToClassGenericType() throws NoSuchMethodException {
+        Type type = getClass()
+                .getDeclaredMethod("boundGenericType")
+                .getGenericReturnType();
+        assertEquals(List.class, ObjectUtils.toClass(type));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testToClassMalformedType() {
+        ObjectUtils.toClass(new Type() {});
     }
 }
