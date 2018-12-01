@@ -78,7 +78,7 @@ public final class DefaultKeyToString implements KeyToString {
 
     private static <SELF extends TranslationKey<SELF, A>, A> Class<?> cls(TranslationKey<SELF, A> key) {
         if (key instanceof ClassTranslationKey) {
-            return ((ClassTranslationKey<A>) key).cls();
+            return ((ClassTranslationKey<?>) key).cls();
         } else if (key instanceof EnumTranslationKey && key instanceof Enum) {
             return key.getClass();
         } else {

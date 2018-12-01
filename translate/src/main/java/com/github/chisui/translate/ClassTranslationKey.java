@@ -5,12 +5,17 @@ import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;
 
 
-public final class ClassTranslationKey<C> implements TranslationKey<ClassTranslationKey<C>, C> {
+/**
+ * A {@link TranslationKey} that represents a Translatable type.
+ *
+ * @param <C> concrete {@link Translatable} subtype.
+ */
+public final class ClassTranslationKey<C extends Translatable> implements TranslationKey<ClassTranslationKey<C>, C> {
 
     private final Class<C> cls;
 
     ClassTranslationKey(Class<C> cls) {
-        this.cls = requireNonNull(cls);
+        this.cls = requireNonNull(cls, "cls");
     }
 
     @Override
@@ -20,7 +25,7 @@ public final class ClassTranslationKey<C> implements TranslationKey<ClassTransla
 
     @Override
     public String toKeyString() {
-        return cls.getCanonicalName();
+        return DefaultKeyToString.defaultToKeyString(this);
     }
 
     public Class<C> cls() {
