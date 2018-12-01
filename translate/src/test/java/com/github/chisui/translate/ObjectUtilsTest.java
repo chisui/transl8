@@ -1,6 +1,5 @@
 package com.github.chisui.translate;
 
-import jdk.internal.org.objectweb.asm.TypeReference;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Test;
@@ -10,8 +9,6 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.BiFunction;
 
 import static org.junit.Assert.*;
 
