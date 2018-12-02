@@ -8,26 +8,27 @@ import java.util.function.BiFunction;
 
 import static java.util.Objects.requireNonNull;
 
-public final class ResourceBundleMessageSource implements BiFunction<Locale, String, String> {
+public final class ResourceBundleMessageSource implements BiFunction<String, Locale, Optional<String>> {
 
     private final String bundleName;
 
     private ResourceBundleMessageSource(String bundleName) {
-        this.bundleName = bundleName;
+        this.bundleName = requireNonNull(bundleName, "bundleName");
     }
 
-    public static Optional<ResourceBundleMessageSource> of(String bundleName) {
-        requireNonNull(bundleName, "bundleName");
-        try {
-            ResourceBundle.getBundle(bundleName);
-            return Optional.of(new ResourceBundleMessageSource(bundleName));
-        } catch (MissingResourceException e) {
-            return Optional.empty();
-        }
+    public static ResourceBundleMessageSource of(String bundleName) {
+        return new ResourceBundleMessageSource(bundleName);
     }
 
     @Override
-    public String apply(Locale locale, String key) {
-        return ResourceBundle.getBundle(bundleName, locale).getString(key);
+    public Optional<String> apply(String key, Locale locale) {
+        try {
+            return Optional.of(ResourceBundle.getBundle(bundleName, locale))
+                    .map(bundle -> bundle.getObject(key))
+                    .filter(String.class::isInstance)
+                    .map(String.class::cast);
+        } catch (MissingResourceException e) {
+            return Optional.empty();
+        }
     }
 }

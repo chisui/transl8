@@ -94,4 +94,9 @@ public final class DefaultKeyToString implements KeyToString {
             throw new IllegalArgumentException("can not determine translation key class of " + key);
         }
     }
+
+    @Override
+    public String toString() {
+        return "DefaultKeyToString";
+    }
 }

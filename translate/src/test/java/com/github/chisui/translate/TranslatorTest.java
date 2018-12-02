@@ -22,9 +22,8 @@ public class TranslatorTest {
 
     @Test
     public void testOf() {
-        Translator<String> translator = Translator.of(
-                ResourceBundleMessageSource.of("testBundle")
-                        .orElseThrow(() -> new IllegalStateException("testBundle")),
+        Translator<String> translator = Translator.<String, String>of(
+                ResourceBundleMessageSource.of("testBundle"),
                 MessageFormatFormatter::<Object>unsafeOf);
 
         String actual = translator.apply(ExampleKeyEnum.KEY, "world", "Mars");

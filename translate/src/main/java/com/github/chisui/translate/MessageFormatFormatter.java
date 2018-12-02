@@ -11,73 +11,72 @@ import static java.util.Objects.requireNonNull;
 
 public final class MessageFormatFormatter<A> implements Formatter<A, String> {
 
-    private final String message;
+    private final MessageFormat messageFormat;
 
-    private MessageFormatFormatter(String message) {
-        this.message = requireNonNull(message, "message");
+    private MessageFormatFormatter(String message, Locale locale) {
+        this.messageFormat = new MessageFormat(message, locale);
     }
 
-    public static <A> MessageFormatFormatter<A> unsafeOf(String message) {
-        return new MessageFormatFormatter<>(message);
+    public static <A> MessageFormatFormatter<A> unsafeOf(String message, Locale locale) {
+        return new MessageFormatFormatter<>(message, locale);
     }
 
-    public static <A extends Iterable<?>> MessageFormatFormatter<A> ofIterable(String message) {
-        return unsafeOf(message);
+    public static <A extends Iterable<?>> MessageFormatFormatter<A> ofIterable(String message, Locale locale) {
+        return unsafeOf(message, locale);
     }
 
-    public static MessageFormatFormatter<Void> ofVoid(String message) {
+    public static MessageFormatFormatter<Void> ofVoid(String message, Locale locale) {
         if (new MessageFormat(message).getFormats().length != 0) {
             throw new IllegalArgumentException("expected message to not require any arguments \"" + message + "\"");
         }
-        return unsafeOf(message);
+        return unsafeOf(message, locale);
     }
 
-    public static <A> MessageFormatFormatter<A[]> ofGenericArray(String message) {
-        return unsafeOf(message);
+    public static <A> MessageFormatFormatter<A[]> ofGenericArray(String message, Locale locale) {
+        return unsafeOf(message, locale);
     }
 
-    public static MessageFormatFormatter<long[]> ofLongArray(String message) {
-        return unsafeOf(message);
+    public static MessageFormatFormatter<long[]> ofLongArray(String message, Locale locale) {
+        return unsafeOf(message, locale);
     }
 
-    public static MessageFormatFormatter<int[]> ofIntArray(String message) {
-        return unsafeOf(message);
+    public static MessageFormatFormatter<int[]> ofIntArray(String message, Locale locale) {
+        return unsafeOf(message, locale);
     }
 
-    public static MessageFormatFormatter<short[]> ofShortArray(String message) {
-        return unsafeOf(message);
+    public static MessageFormatFormatter<short[]> ofShortArray(String message, Locale locale) {
+        return unsafeOf(message, locale);
     }
 
-    public static MessageFormatFormatter<char[]> ofCharArray(String message) {
-        return unsafeOf(message);
+    public static MessageFormatFormatter<char[]> ofCharArray(String message, Locale locale) {
+        return unsafeOf(message, locale);
     }
 
-    public static MessageFormatFormatter<byte[]> ofByteArray(String message) {
-        return unsafeOf(message);
+    public static MessageFormatFormatter<byte[]> ofByteArray(String message, Locale locale) {
+        return unsafeOf(message, locale);
     }
 
-    public static MessageFormatFormatter<boolean[]> ofBooleanArray(String message) {
-        return unsafeOf(message);
+    public static MessageFormatFormatter<boolean[]> ofBooleanArray(String message, Locale locale) {
+        return unsafeOf(message, locale);
     }
 
-    public static MessageFormatFormatter<double[]> ofDoubleArray(String message) {
-        return unsafeOf(message);
+    public static MessageFormatFormatter<double[]> ofDoubleArray(String message, Locale locale) {
+        return unsafeOf(message, locale);
     }
 
-    public static MessageFormatFormatter<float[]> ofFloatArray(String message) {
-        return unsafeOf(message);
+    public static MessageFormatFormatter<float[]> ofFloatArray(String message, Locale locale) {
+        return unsafeOf(message, locale);
     }
 
     @Override
     @SuppressWarnings({
             "unchecked", "rawtype",
     })
-    public String apply(A args, Locale locale, TranslationFunction<String> translator) {
-        MessageFormat format = new MessageFormat(message, locale);
-        if (args == null && format.getFormats().length == 0) {
-            return format.format(new Object[0]);
+    public String apply(A args, TranslationFunction<String> translator) {
+        if (args == null && messageFormat.getFormats().length == 0) {
+            return messageFormat.format(new Object[0]);
         } else {
-            return format.format(Arrays.stream(toArrayUnsafe(args))
+            return messageFormat.format(Arrays.stream(toArrayUnsafe(args))
                     .map(arg -> translateIfPossible(arg, translator))
                     .toArray());
         }
@@ -99,7 +98,7 @@ public final class MessageFormatFormatter<A> implements Formatter<A, String> {
         Class<?> cls = toClass(type);
         return cls.isArray()
                 || Iterable.class.isAssignableFrom(cls)
-                || (new MessageFormat(message).getFormats().length == 0 && Void.class.equals(cls));
+                || (messageFormat.getFormats().length == 0 && Void.class.equals(cls));
     }
 
     @Override
@@ -107,16 +106,16 @@ public final class MessageFormatFormatter<A> implements Formatter<A, String> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MessageFormatFormatter<?> that = (MessageFormatFormatter<?>) o;
-        return message.equals(that.message);
+        return messageFormat.equals(that.messageFormat);
     }
 
     @Override
     public int hashCode() {
-        return message.hashCode();
+        return messageFormat.hashCode();
     }
 
     @Override
     public String toString() {
-        return "MessageFormatFormatter(\"" + message + "\")";
+        return "MessageFormatFormatter(" + messageFormat.getLocale() + ":\"" + messageFormat.toPattern() + "\")";
     }
 }

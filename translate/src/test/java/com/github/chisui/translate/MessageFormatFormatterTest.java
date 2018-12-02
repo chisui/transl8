@@ -49,25 +49,25 @@ public class MessageFormatFormatterTest {
     @Test
     @Parameters(method = "args")
     public void testApply(String format, String expected, Object obj) {
-        assertEquals(expected, MessageFormatFormatter.unsafeOf(format)
-                .apply(obj, Locale.ENGLISH, neverInvoced));
+        assertEquals(expected, MessageFormatFormatter.unsafeOf(format, Locale.ENGLISH)
+                .apply(obj, neverInvoced));
     }
 
     @Test
     @Parameters(method = "args")
     public void testAcceptsArgumentsOfType(String unused0, String unused1, Object arg) {
-        assertTrue(MessageFormatFormatter.unsafeOf("").acceptsArgumentsOfType(arg.getClass()));
+        assertTrue(MessageFormatFormatter.unsafeOf("", Locale.ENGLISH).acceptsArgumentsOfType(arg.getClass()));
     }
 
     @Test
     public void testAcceptsArgumentsOfTypeVoid() {
-        assertTrue(MessageFormatFormatter.unsafeOf("").acceptsArgumentsOfType(Void.class));
+        assertTrue(MessageFormatFormatter.unsafeOf("", Locale.ENGLISH).acceptsArgumentsOfType(Void.class));
     }
 
     @Test
     public void testInvocesTranslatorKey() {
-        String actual = MessageFormatFormatter.ofIterable("{0}")
-                .apply(singletonList(TranslationRequest.of(ExampleKeyEnum.KEY, "hello")), Locale.ENGLISH,
+        String actual = MessageFormatFormatter.ofIterable("{0}", Locale.ENGLISH)
+                .apply(singletonList(TranslationRequest.of(ExampleKeyEnum.KEY, "hello")),
                         fromUnsafe((key, arg) -> {
                             assertEquals(ExampleKeyEnum.KEY, key);
                             assertArrayEquals(new String[]{"hello"}, (String[]) arg);
@@ -78,8 +78,8 @@ public class MessageFormatFormatterTest {
 
     @Test
     public void testInvocesTranslatorTranslatable() {
-        String actual = MessageFormatFormatter.ofIterable("{0}")
-                .apply(singletonList(new ExampleTranslatable()), Locale.ENGLISH,
+        String actual = MessageFormatFormatter.ofIterable("{0}", Locale.ENGLISH)
+                .apply(singletonList(new ExampleTranslatable()),
                         fromUnsafe((key, arg) -> {
                             assertEquals(TranslationKey.of(ExampleTranslatable.class), key);
                             assertTrue(arg instanceof ExampleTranslatable);
@@ -90,72 +90,72 @@ public class MessageFormatFormatterTest {
 
     @Test
     public void testToString() {
-        assertEquals("MessageFormatFormatter(\"{0} {1,number,#.00} {0}\")",
-                MessageFormatFormatter.unsafeOf("{0} {1,number,#.00} {0}").toString());
+        assertEquals("MessageFormatFormatter(en:\"{0} {1,number,#.00} {0}\")",
+                MessageFormatFormatter.unsafeOf("{0} {1,number,#.00} {0}", Locale.ENGLISH).toString());
     }
 
     @Test
     public void testOfGenericArrayCompiles() {
-        MessageFormatFormatter.ofGenericArray("")
-                .apply(new Object[0], Locale.ENGLISH, neverInvoced);
+        MessageFormatFormatter.ofGenericArray("", Locale.ENGLISH)
+                .apply(new Object[0], neverInvoced);
     }
 
     @Test
     public void testOfVoidCompiles() {
-        MessageFormatFormatter.ofVoid("")
-                .apply(null, Locale.ENGLISH, neverInvoced);
+        MessageFormatFormatter.ofVoid("", Locale.ENGLISH)
+                .apply(null, neverInvoced);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testOfVoidMessageHasArgs() {
-        MessageFormatFormatter.ofVoid("{0}");
+        MessageFormatFormatter.ofVoid("{0}", Locale.ENGLISH);
     }
 
     @Test
     public void testOfLongArrayCompiles() {
-        MessageFormatFormatter.ofLongArray("")
-                .apply(new long[0], Locale.ENGLISH, neverInvoced);
+        MessageFormatFormatter.ofLongArray("", Locale.ENGLISH)
+                .apply(new long[0], neverInvoced);
     }
 
     @Test
     public void testOfIntArrayCompiles() {
-        MessageFormatFormatter.ofIntArray("")
-                .apply(new int[0], Locale.ENGLISH, neverInvoced);
+        MessageFormatFormatter.ofIntArray("", Locale.ENGLISH)
+                .apply(new int[0], neverInvoced);
     }
 
     @Test
     public void testOfShortArrayCompiles() {
-        MessageFormatFormatter.ofShortArray("")
-                .apply(new short[0], Locale.ENGLISH, neverInvoced);
+        MessageFormatFormatter.ofShortArray("", Locale.ENGLISH)
+                .apply(new short[0], neverInvoced);
     }
 
     @Test
     public void testOfCharArrayCompiles() {
-        MessageFormatFormatter.ofCharArray("")
-                .apply(new char[0], Locale.ENGLISH, neverInvoced);
+        MessageFormatFormatter.ofCharArray("", Locale.ENGLISH)
+                .apply(new char[0], neverInvoced);
     }
 
     @Test
     public void testOfByteArrayCompiles() {
-        MessageFormatFormatter.ofByteArray("")
-                .apply(new byte[0], Locale.ENGLISH, neverInvoced);
+        MessageFormatFormatter.ofByteArray("", Locale.ENGLISH)
+                .apply(new byte[0], neverInvoced);
     }
 
     @Test
     public void testOfBooleanArrayCompiles() {
-        MessageFormatFormatter.ofBooleanArray("")
-                .apply(new boolean[0], Locale.ENGLISH, neverInvoced);
+        MessageFormatFormatter.ofBooleanArray("", Locale.ENGLISH)
+                .apply(new boolean[0], neverInvoced);
     }
 
     @Test
     public void testOfDoubleArrayCompiles() {
-        MessageFormatFormatter.ofDoubleArray("")
-                .apply(new double[0], Locale.ENGLISH, neverInvoced);
+        MessageFormatFormatter.ofDoubleArray("", Locale.ENGLISH)
+                .apply(new double[0], neverInvoced);
     }
 
     @Test
     public void testOfFloatArrayCompiles() {
-        MessageFormatFormatter.ofFloatArray("")
-                .apply(new float[0], Locale.ENGLISH, neverInvoced);
+        MessageFormatFormatter.ofFloatArray("", Locale.ENGLISH)
+                .apply(new float[0], neverInvoced);
     }
 }

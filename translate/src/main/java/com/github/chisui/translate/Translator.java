@@ -1,6 +1,7 @@
 package com.github.chisui.translate;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -45,16 +46,16 @@ public interface Translator<R> extends TranslationFunction<R> {
         return f::apply;
     }
 
-    static <T, R> ComposedTranslator<T, R> of(
+    static <T, R> FormatterSourceTranslator<R> of(
             KeyToString keyToString,
-            BiFunction<? super Locale, ? super String, T> messageSource,
-            Function<? super T, ? extends Formatter<Object, R>> toFormatter) {
-        return new ComposedTranslator<>(keyToString, messageSource, toFormatter);
+            BiFunction<? super String, ? super Locale, Optional<T>> messageSource,
+            BiFunction<? super T, ? super Locale, ? extends Formatter<Object, R>> toFormatter) {
+        return new FormatterSourceTranslator<>(FormatterSource.of(keyToString, messageSource, toFormatter));
     }
 
-    static <T, R> ComposedTranslator<T, R> of(
-            BiFunction<? super Locale, ? super String, T> messageSource,
-            Function<? super T, ? extends Formatter<Object, R>> toFormatter) {
+    static <T, R> FormatterSourceTranslator<R> of(
+            BiFunction<? super String, ? super Locale, Optional<T>> messageSource,
+            BiFunction<? super T, ? super Locale, ? extends Formatter<Object, R>> toFormatter) {
         return of(DefaultKeyToString.instance(), messageSource, toFormatter);
     }
 

@@ -1,25 +1,44 @@
 package com.github.chisui.translate.verify;
 
 import com.github.chisui.translate.*;
+import com.github.chisui.translate.Formatter;
+import com.google.common.collect.Table.Cell;
+import com.google.common.collect.Tables;
 import org.reflections.Reflections;
 
 import java.lang.reflect.*;
-import java.util.Arrays;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
+import static com.github.chisui.translate.ObjectUtils.toClass;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 
 public final class TranslationVerify {
     private TranslationVerify() {}
 
+
+
+    public static <R> Stream<Cell<Locale, TranslationKey<?, ?>, Optional<Formatter<?, R>>>> allFormatters(
+            String basePackage,
+            FormatterSource<R> formatterSource,
+            Locale... supportedLocales) {
+        return discoverTranslationKeysInternal(basePackage)
+                .flatMap(key -> Arrays.stream(supportedLocales)
+                    .map(locale -> Tables.immutableCell(locale, key, formatterSource.formatterOf(locale, (TranslationKey) key))));
+    }
+
     public static Set<TranslationKey<?, ?>> discoverTranslationKeys(String basePackage) {
+        return discoverTranslationKeysInternal(basePackage)
+                .collect(toImmutableSet());
+    }
+
+    private static Stream<TranslationKey<?, ?>> discoverTranslationKeysInternal(String basePackage) {
         Reflections refl = new Reflections(basePackage);
 
         return Stream.concat(
                 translatableTranslationKeys(refl),
                 enumTranslationKeys(refl)
-        ).collect(toImmutableSet());
+        );
     }
 
     @SuppressWarnings({
@@ -49,16 +68,6 @@ public final class TranslationVerify {
             return Arrays.stream(values);
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassCastException e) {
             throw new IllegalStateException(e);
-        }
-    }
-
-    private static Class<?> toClass(Type type) {
-        if (type instanceof Class) {
-            return (Class<?>) type;
-        } else if (type instanceof ParameterizedType) {
-            return toClass(((ParameterizedType) type).getRawType());
-        } else {
-            throw new IllegalStateException("could not determine class from " + type);
         }
     }
 }

@@ -10,20 +10,20 @@ import static org.junit.Assert.assertEquals;
 
 public class ResourceBundleMessageSourceTest {
 
-    final ResourceBundleMessageSource classUnderTest = ResourceBundleMessageSource.of("testBundle").get();
+    final ResourceBundleMessageSource classUnderTest = ResourceBundleMessageSource.of("testBundle");
 
     @Test
     public void testKeyPresent() {
-        assertEquals("hello", classUnderTest.apply(ENGLISH, "hello"));
+        assertEquals(Optional.of("hello"), classUnderTest.apply("hello", ENGLISH));
     }
 
-    @Test(expected = MissingResourceException.class)
+    @Test
     public void testKeyAbsent() {
-        classUnderTest.apply(ENGLISH, "goodbye");
+        assertEquals(Optional.empty(), classUnderTest.apply("goodbye", ENGLISH));
     }
 
     @Test
     public void testMissingBundle() {
-        assertEquals(Optional.empty(), ResourceBundleMessageSource.of("someMissingBundle"));
+        assertEquals(Optional.empty(), ResourceBundleMessageSource.of("someMissingBundle").apply("hello", ENGLISH));
     }
 }

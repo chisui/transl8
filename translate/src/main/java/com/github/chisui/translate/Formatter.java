@@ -7,6 +7,6 @@ public interface Formatter<A, R> {
 
     boolean acceptsArgumentsOfType(Type type);
 
-    R apply(A arg, Locale locale, TranslationFunction<R> translator);
+    R apply(A arg, TranslationFunction<R> translator);
 
 }
