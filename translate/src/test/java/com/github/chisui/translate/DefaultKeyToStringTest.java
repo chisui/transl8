@@ -9,8 +9,6 @@ import static org.junit.Assert.assertEquals;
 
 public class DefaultKeyToStringTest {
 
-    private static final int ENUM_CTR_MODIFIER_MAGIC_NUMBER = 16384;
-
     private static final class BrokenTranslationKey implements TranslationKey<BrokenTranslationKey, Long> {
         @Override
         public Type argType() {
@@ -32,13 +30,6 @@ public class DefaultKeyToStringTest {
     @Test(expected = IllegalArgumentException.class)
     public void testDefaultToKeyStringMalformedKey() {
         DefaultKeyToString.defaultToKeyString(new BrokenTranslationKey());
-    }
-
-    @Test
-    public void testDefaultToKeyStringApply() {
-        KeyToString keyToString = DefaultKeyToString.instance();
-        assertEquals(SimpleExampleTranslatable.class.getCanonicalName(),
-                keyToString.apply(TranslationKey.of(SimpleExampleTranslatable.class)));
     }
 
     private enum BrokenEnum implements EnumTranslationKey<BrokenEnum, Void> {
