@@ -72,7 +72,7 @@ public final class MessageFormatFormatter<A> implements Formatter<A, String> {
     @SuppressWarnings({
             "unchecked", "rawtype",
     })
-    public String apply(A args, TranslationFunction<String> translator) {
+    public String apply(TranslationFunction<String> translator, A args) {
         if (args == null && messageFormat.getFormats().length == 0) {
             return messageFormat.format(new Object[0]);
         } else {

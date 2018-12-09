@@ -4,3 +4,4 @@ translate.iml
 .project
 .classpath
 .settings/
+**/.attach_pid*

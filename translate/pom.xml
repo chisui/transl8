@@ -11,6 +11,11 @@
     <artifactId>translate</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>net.jodah</groupId>
+            <artifactId>typetools</artifactId>
+        </dependency>
+
         <!-- test -->
         <dependency>
             <groupId>org.assertj</groupId>

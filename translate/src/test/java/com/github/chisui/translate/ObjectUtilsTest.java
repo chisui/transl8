@@ -2,6 +2,7 @@ package com.github.chisui.translate;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
+import net.jodah.typetools.TypeResolver;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -9,6 +10,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 import static org.junit.Assert.*;
 

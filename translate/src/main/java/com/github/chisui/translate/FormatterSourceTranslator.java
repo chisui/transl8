@@ -16,6 +16,6 @@ public class FormatterSourceTranslator<R> implements Translator<R> {
     public <K extends TranslationKey<K, A>, A> R apply(Locale locale, K key, A arg) {
         return formatterSource.formatterOf(locale, key)
                 .orElseThrow(() -> new MissingTranslationException(formatterSource.toString(), locale, key))
-                .apply(arg, this);
+                .apply(this, arg);
     }
 }

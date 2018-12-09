@@ -34,6 +34,13 @@ public class DefaultKeyToStringTest {
         DefaultKeyToString.defaultToKeyString(new BrokenTranslationKey());
     }
 
+    @Test
+    public void testDefaultToKeyStringApply() {
+        KeyToString keyToString = DefaultKeyToString.instance();
+        assertEquals(SimpleExampleTranslatable.class.getCanonicalName(),
+                keyToString.apply(TranslationKey.of(SimpleExampleTranslatable.class)));
+    }
+
     private enum BrokenEnum implements EnumTranslationKey<BrokenEnum, Void> {
         BROKEN;
 

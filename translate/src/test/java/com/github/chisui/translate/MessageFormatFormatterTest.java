@@ -50,7 +50,7 @@ public class MessageFormatFormatterTest {
     @Parameters(method = "args")
     public void testApply(String format, String expected, Object obj) {
         assertEquals(expected, MessageFormatFormatter.unsafeOf(format, Locale.ENGLISH)
-                .apply(obj, neverInvoced));
+                .apply(neverInvoced, obj));
     }
 
     @Test
@@ -67,24 +67,24 @@ public class MessageFormatFormatterTest {
     @Test
     public void testInvocesTranslatorKey() {
         String actual = MessageFormatFormatter.ofIterable("{0}", Locale.ENGLISH)
-                .apply(singletonList(TranslationRequest.of(ExampleKeyEnum.KEY, "hello")),
-                        fromUnsafe((key, arg) -> {
+                .apply(fromUnsafe((key, arg) -> {
                             assertEquals(ExampleKeyEnum.KEY, key);
                             assertArrayEquals(new String[]{"hello"}, (String[]) arg);
                             return "world";
-                        }));
+                        }),
+                        singletonList(TranslationRequest.of(ExampleKeyEnum.KEY, "hello")));
         assertEquals("world", actual);
     }
 
     @Test
     public void testInvocesTranslatorTranslatable() {
         String actual = MessageFormatFormatter.ofIterable("{0}", Locale.ENGLISH)
-                .apply(singletonList(new ExampleTranslatable()),
-                        fromUnsafe((key, arg) -> {
+                .apply(fromUnsafe((key, arg) -> {
                             assertEquals(TranslationKey.of(ExampleTranslatable.class), key);
                             assertTrue(arg instanceof ExampleTranslatable);
                             return "world";
-                        }));
+                        }),
+                        singletonList(new ExampleTranslatable()));
         assertEquals("world", actual);
     }
 
@@ -97,13 +97,13 @@ public class MessageFormatFormatterTest {
     @Test
     public void testOfGenericArrayCompiles() {
         MessageFormatFormatter.ofGenericArray("", Locale.ENGLISH)
-                .apply(new Object[0], neverInvoced);
+                .apply(neverInvoced, new Object[0]);
     }
 
     @Test
     public void testOfVoidCompiles() {
         MessageFormatFormatter.ofVoid("", Locale.ENGLISH)
-                .apply(null, neverInvoced);
+                .apply(neverInvoced,null);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -114,48 +114,48 @@ public class MessageFormatFormatterTest {
     @Test
     public void testOfLongArrayCompiles() {
         MessageFormatFormatter.ofLongArray("", Locale.ENGLISH)
-                .apply(new long[0], neverInvoced);
+                .apply(neverInvoced, new long[0]);
     }
 
     @Test
     public void testOfIntArrayCompiles() {
         MessageFormatFormatter.ofIntArray("", Locale.ENGLISH)
-                .apply(new int[0], neverInvoced);
+                .apply(neverInvoced, new int[0]);
     }
 
     @Test
     public void testOfShortArrayCompiles() {
         MessageFormatFormatter.ofShortArray("", Locale.ENGLISH)
-                .apply(new short[0], neverInvoced);
+                .apply(neverInvoced, new short[0]);
     }
 
     @Test
     public void testOfCharArrayCompiles() {
         MessageFormatFormatter.ofCharArray("", Locale.ENGLISH)
-                .apply(new char[0], neverInvoced);
+                .apply(neverInvoced, new char[0]);
     }
 
     @Test
     public void testOfByteArrayCompiles() {
         MessageFormatFormatter.ofByteArray("", Locale.ENGLISH)
-                .apply(new byte[0], neverInvoced);
+                .apply(neverInvoced, new byte[0]);
     }
 
     @Test
     public void testOfBooleanArrayCompiles() {
         MessageFormatFormatter.ofBooleanArray("", Locale.ENGLISH)
-                .apply(new boolean[0], neverInvoced);
+                .apply(neverInvoced, new boolean[0]);
     }
 
     @Test
     public void testOfDoubleArrayCompiles() {
         MessageFormatFormatter.ofDoubleArray("", Locale.ENGLISH)
-                .apply(new double[0], neverInvoced);
+                .apply(neverInvoced, new double[0]);
     }
 
     @Test
     public void testOfFloatArrayCompiles() {
         MessageFormatFormatter.ofFloatArray("", Locale.ENGLISH)
-                .apply(new float[0], neverInvoced);
+                .apply(neverInvoced, new float[0]);
     }
 }
