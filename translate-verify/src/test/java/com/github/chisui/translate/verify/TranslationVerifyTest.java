@@ -53,11 +53,11 @@ public class TranslationVerifyTest {
 
         assertThat(table.row(ENGLISH).keySet())
                 .containsExactlyInAnyOrderElementsOf(ALL_KEYS.stream()
-                        .map(DefaultKeyToString.instance())
+                        .map(DefaultKeyToString::defaultToKeyString)
                         .collect(toImmutableSet()));
         assertThat(table.row(GERMAN).keySet())
                 .containsExactlyInAnyOrderElementsOf(ALL_KEYS.stream()
-                        .map(DefaultKeyToString.instance())
+                        .map(DefaultKeyToString::defaultToKeyString)
                         .collect(toImmutableSet()));
 
         assertThat(table.get(GERMAN, "override.translatable"))
