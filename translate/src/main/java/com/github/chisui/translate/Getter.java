@@ -12,8 +12,4 @@ public interface Getter<A, B> extends Function<A, B>, VerifyArguments {
         return resolveRawArguments(Function.class, getClass())[0].isAssignableFrom(toClass(type));
     }
 
-    static <A, B> PropertyGetter<A, B> ofProp(String prop) {
-        return new PropertyGetter<>(prop);
-    }
-
 }

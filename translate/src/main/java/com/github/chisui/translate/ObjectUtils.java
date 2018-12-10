@@ -150,24 +150,4 @@ public final class ObjectUtils {
             throw new IllegalArgumentException("can not turn " + t + " into a class");
         }
     }
-
-    public static <A> Optional<Property<A>> property(Type t, String prop) {
-        return Stream.iterate(toClass(t), cls -> (Class) cls.getSuperclass())
-                .flatMap(cls -> Stream.concat(
-                    method(cls, prop),
-                    method(cls, "get" + prop.substring(0, 1).toUpperCase() + prop.substring(1))))
-                .findFirst()
-                .map(m -> );
-    }
-
-    public static Stream<Method> method(Class<?> cls, String methodName, Class<?>... argTypes) {
-        return Stream.of(cls)
-                .flatMap(c -> {
-                    try {
-                        return Stream.of(c.getDeclaredMethod(methodName, argTypes));
-                    } catch (NoSuchMethodException e) {
-                        return Stream.empty();
-                    }
-                });
-    }
 }

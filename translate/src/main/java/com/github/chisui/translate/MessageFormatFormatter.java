@@ -7,7 +7,6 @@ import java.util.Locale;
 
 import static com.github.chisui.translate.ObjectUtils.toArrayUnsafe;
 import static com.github.chisui.translate.ObjectUtils.toClass;
-import static java.util.Objects.requireNonNull;
 
 public final class MessageFormatFormatter<A> implements Formatter<A, String> {
 

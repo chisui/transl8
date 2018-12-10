@@ -12,6 +12,7 @@
 
     <modules>
         <module>translate</module>
+        <module>translate-spel</module>
         <module>translate-verify</module>
     </modules>
 
@@ -62,9 +63,10 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <project.scm.id>github</project.scm.id>
+
+        <spring.version>5.1.3.RELEASE</spring.version>
         <!-- test -->
         <jmockit.version>1.20</jmockit.version>
-        <hamcrest.version>2.0.0.0</hamcrest.version>
         <junit.version>4.12</junit.version>
     </properties>
 
@@ -81,11 +83,22 @@
                 <version>0.2.0-SNAPSHOT</version>
             </dependency>
             <dependency>
+                <groupId>com.github.chisui.translate</groupId>
+                <artifactId>translate-spel</artifactId>
+                <version>0.2.0-SNAPSHOT</version>
+            </dependency>
+
+
+            <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>27.0-jre</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-expression</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
             <dependency>
                 <groupId>net.jodah</groupId>
                 <artifactId>typetools</artifactId>
