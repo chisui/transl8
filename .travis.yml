@@ -3,7 +3,7 @@ jdk:
   - oraclejdk8
 
 script:
-  - mvn test -P test
+  - mvn package 
 
 before_install:
   - pip install --user codecov
