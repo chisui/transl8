@@ -2,6 +2,7 @@ package com.github.chisui.translate.verify;
 
 import com.github.chisui.translate.*;
 import com.github.chisui.translate.Formatter;
+import com.google.common.collect.Table;
 import com.google.common.collect.Table.Cell;
 import com.google.common.collect.Tables;
 import org.reflections.Reflections;
@@ -16,7 +17,36 @@ import static com.google.common.collect.ImmutableSet.toImmutableSet;
 public final class TranslationVerify {
     private TranslationVerify() {}
 
+    public static <R> Stream<TranslateVerificationError> allErrors(
+            String basePackage,
+            FormatterSource<R> formatterSource,
+            Locale... supportedLocales) {
+        return allBrokenFormatters(basePackage, formatterSource, supportedLocales)
+               .map(TranslationVerify::toMessage);
+    }
 
+    private static <R> TranslateVerificationError toMessage(Cell<Locale, TranslationKey<?,?>, Optional<Formatter<?, R>>> cell) {
+        Locale locale = cell.getRowKey();
+        TranslationKey<?, ?> key = cell.getColumnKey();
+
+        return cell.getValue()
+                .<TranslateVerificationError>map(f -> new TranslateVerificationError.TypeMismatch(key, locale, f))
+                .orElseGet(() -> new TranslateVerificationError.MissingFormatter(key, locale));
+    }
+
+    public static <R> Stream<Cell<Locale, TranslationKey<?, ?>, Optional<Formatter<?, R>>>> allBrokenFormatters(
+            String basePackage,
+            FormatterSource<R> formatterSource,
+            Locale... supportedLocales) {
+        return allFormatters(basePackage, formatterSource, supportedLocales)
+                .filter(TranslationVerify::checkFormatter);
+    }
+
+    private static <R> boolean checkFormatter(Cell<Locale, TranslationKey<?, ?>, Optional<Formatter<?, R>>> cell) {
+        return !cell.getValue()
+                .filter(f -> f.acceptsArgumentsOfType(cell.getColumnKey().argType()))
+                .isPresent();
+    }
 
     public static <R> Stream<Cell<Locale, TranslationKey<?, ?>, Optional<Formatter<?, R>>>> allFormatters(
             String basePackage,

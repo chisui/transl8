@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.github.chisui.translate.DefaultKeyToString.defaultToKeyString;
+import static com.github.chisui.translate.verify.TranslationVerify.allErrors;
 import static com.github.chisui.translate.verify.TranslationVerify.allFormatters;
 import static com.github.chisui.translate.verify.TranslationVerify.discoverTranslationKeys;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
