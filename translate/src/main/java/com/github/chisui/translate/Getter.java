@@ -6,6 +6,7 @@ import java.util.function.Function;
 import static com.github.chisui.translate.ObjectUtils.toClass;
 import static net.jodah.typetools.TypeResolver.resolveRawArguments;
 
+@FunctionalInterface
 public interface Getter<A, B> extends Function<A, B>, VerifyArguments {
 
     default boolean acceptsArgumentsOfType(Type type) {

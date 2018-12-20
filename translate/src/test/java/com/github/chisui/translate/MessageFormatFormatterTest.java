@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import java.util.Arrays;
 import java.util.Locale;
 
-import static com.github.chisui.translate.TranslationFunction.fromUnsafe;
+import static com.github.chisui.translate.TranslationFunction.ofUnsafe;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static nl.jqno.equalsverifier.Warning.NULL_FIELDS;
@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 @RunWith(JUnitParamsRunner.class)
 public class MessageFormatFormatterTest {
 
-    final TranslationFunction<String> neverInvoced = fromUnsafe((key, arg) -> {
+    final TranslationFunction<String> neverInvoced = ofUnsafe((key, arg) -> {
         throw new IllegalArgumentException("should never be invoced but was with args: " + key + " " + arg);
     });
 
@@ -67,7 +67,7 @@ public class MessageFormatFormatterTest {
     @Test
     public void testInvocesTranslatorKey() {
         String actual = MessageFormatFormatter.ofIterable("{0}", Locale.ENGLISH)
-                .apply(fromUnsafe((key, arg) -> {
+                .apply(ofUnsafe((key, arg) -> {
                             assertEquals(ExampleKeyEnum.KEY, key);
                             assertArrayEquals(new String[]{"hello"}, (String[]) arg);
                             return "world";
@@ -79,7 +79,7 @@ public class MessageFormatFormatterTest {
     @Test
     public void testInvocesTranslatorTranslatable() {
         String actual = MessageFormatFormatter.ofIterable("{0}", Locale.ENGLISH)
-                .apply(fromUnsafe((key, arg) -> {
+                .apply(ofUnsafe((key, arg) -> {
                             assertEquals(TranslationKey.of(ExampleTranslatable.class), key);
                             assertTrue(arg instanceof ExampleTranslatable);
                             return "world";

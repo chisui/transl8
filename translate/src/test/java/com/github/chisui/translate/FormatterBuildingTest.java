@@ -9,19 +9,19 @@ import java.util.Arrays;
 
 import static com.github.chisui.translate.EnumTranslationKeyTest.TestEnumKey.HELLO;
 import static com.github.chisui.translate.Formatter.*;
-import static com.github.chisui.translate.TranslationFunction.fromUnsafe;
+import static com.github.chisui.translate.TranslationFunction.ofUnsafe;
 import static org.junit.Assert.*;
 
 @RunWith(JUnitParamsRunner.class)
 public class FormatterBuildingTest {
 
     private static final TestSelfTranslatable TRANSLATABLE = new TestSelfTranslatable();
-    private static final TranslationFunction<String> TRANSLATOR = fromUnsafe((k, a) -> {
+    private static final TranslationFunction<String> TRANSLATOR = ofUnsafe((k, a) -> {
         if (a == TRANSLATABLE) {
             assertEquals(k, TranslationKey.of((Translatable) a));
             return "translation";
         } else if(k == HELLO) {
-            return Arrays.toString(ObjectUtils.toArrayUnsafe(a));
+            return Arrays.toString(ObjectUtils.toArrayUnsafe(a).get());
         } else {
             fail("unexpected arguments to translator: " + k + ": " + a);
             return null;

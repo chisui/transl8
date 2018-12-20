@@ -1,17 +1,31 @@
 package com.github.chisui.translate;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Stream;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.StreamSupport;
 
+/**
+ * Utility class to deal with objects in a generic way.
+ */
 public final class ObjectUtils {
     private ObjectUtils() {
     }
 
+    /**
+     * Generic equals method.
+     * If both objects are arrays of the same type the corresponding equals method in {@link Arrays} is used.
+     * There is no value coercion done. Array types have to exactly match. The only exception to this are
+     * {@link Object[]}. Each non primitive array is treated as {@link Object[]} and are compared using
+     * {@link Arrays#equals(Object[], Object[])}.
+     * Otherwise the first objects equals method is used.
+     *
+     * @param a first object
+     * @param b second object
+     * @return whether or not both objects are equal.
+     */
     public static boolean equals(Object a, Object b) {
         if (a == b) {
             return true;
@@ -44,6 +58,14 @@ public final class ObjectUtils {
         }
     }
 
+    /**
+     * Generic toString function that is able to turn arrays to strings.
+     * {@code null} is turned into {@code "null"}. Arrays are turned into Strings using the corresponding
+     * {@link Arrays#toString(int[])} function. For all other objects the own {@link Object#toString()} method is used.
+     *
+     * @param obj to turn into {@link String}
+     * @return the resulting {@link String}
+     */
     public static String toString(Object obj) {
         if (obj == null) {
             return "null";
@@ -70,13 +92,23 @@ public final class ObjectUtils {
         }
     }
 
+    /**
+     * Generic Array boxing function.
+     * If the object is not an array or {@link Iterable} an {@link Optional#empty()} is returned.
+     * If the object is an {@code Object[]} the object itself is returned. If the object is a primitive array it is
+     * turned into it's boxed variant. For example {@code int[]} is turned into {@code Integer[]}.
+     * Instances of {@link Collection} and {@link Iterable} are turned into an {@code Object[]} by iterating over them.
+     *
+     * @param obj to turn into an {@code Object[]}
+     * @return the {@code Object[]} or empty.
+     */
     @SuppressWarnings({
             "unchecked", "rawtypes"
     })
-    public static Object[] toArrayUnsafe(Object obj) {
+    public static Optional<Object[]> toArrayUnsafe(Object obj) {
         Object[] objs;
         if (obj instanceof Object[]) {
-            return (Object[]) obj;
+            return Optional.of((Object[]) obj);
         } else if (obj instanceof Collection) {
             objs = new Object[((Collection) obj).size()];
             int i = 0;
@@ -84,9 +116,9 @@ public final class ObjectUtils {
                 objs[i++] = o;
             }
         } else if (obj instanceof Iterable) {
-            return StreamSupport
+            return Optional.of(StreamSupport
                     .stream(((Iterable) obj).spliterator(), false)
-                    .toArray();
+                    .toArray());
         } else if (obj instanceof long[]) {
             long[] arr = (long[]) obj;
             objs = new Object[arr.length];
@@ -136,11 +168,21 @@ public final class ObjectUtils {
                 objs[i] = arr[i];
             }
         } else {
-            throw new IllegalArgumentException("expected array or Iterable but got " + obj);
+            return Optional.empty();
         }
-        return objs;
+        return Optional.of(objs);
     }
 
+    /**
+     * Generic function to determine the underlying {@link Class} of a {@link Type}.
+     * If the {@link Type} is a {@link Class} the argument itself is returned. If the {@link Type} is a
+     * {@link ParameterizedType} the {@link ParameterizedType#getRawType() rawType} is returned.
+     * Otherwise an {@link IllegalArgumentException} is thrown
+     *
+     * @param t to determine {@link Class} of
+     * @return the {@link Class}
+     * @throws IllegalArgumentException if the {@link Class} can't be determined
+     */
     public static Class<?> toClass(Type t) {
         if (t instanceof Class) {
             return (Class<?>) t;

@@ -24,6 +24,7 @@ public class TranslationRequestTest {
     public void testEquals() {
         EqualsVerifier.forClass(TranslationRequest.class)
                 .usingGetClass()
+                .withNonnullFields("key")
                 .verify();
     }
 }

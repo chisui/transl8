@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.Locale;
 
-import static com.github.chisui.translate.TranslationFunction.fromUnsafe;
+import static com.github.chisui.translate.TranslationFunction.ofUnsafe;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -14,7 +14,7 @@ public class ToSpelFormatterTest {
 
     public static class TestTranslatable implements Translatable {}
 
-    private static final TranslationFunction<String> TRANSLATE = fromUnsafe((k, a) -> {
+    private static final TranslationFunction<String> TRANSLATE = ofUnsafe((k, a) -> {
         assertTrue(a instanceof TestTranslatable);
         return "x";
     });

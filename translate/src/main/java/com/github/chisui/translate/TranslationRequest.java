@@ -4,7 +4,12 @@ import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
-
+/**
+ *
+ * @param <K>
+ * @param <A>
+ * @see <a href="https://github.com/chisui/translate/tree/master/translate-verify">Tutorial</a>
+ */
 public final class TranslationRequest<K extends TranslationKey<K, ? super A>, A> {
 
     private final K key;
@@ -51,11 +56,11 @@ public final class TranslationRequest<K extends TranslationKey<K, ? super A>, A>
         TranslationRequest<?, ?> that = (TranslationRequest<?, ?>) o;
         return Objects.equals(this.key, that.key)
                 && ObjectUtils.equals(this.arg, that.arg);
-
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(key, arg);
+        return key.hashCode() * 31
+            + (arg != null ? arg.hashCode() : 0);
     }
 }

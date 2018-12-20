@@ -75,7 +75,8 @@ public final class MessageFormatFormatter<A> implements Formatter<A, String> {
         if (args == null && messageFormat.getFormats().length == 0) {
             return messageFormat.format(new Object[0]);
         } else {
-            return messageFormat.format(Arrays.stream(toArrayUnsafe(args))
+            return messageFormat.format(Arrays.stream(toArrayUnsafe(args)
+                    .orElseThrow(() -> new IllegalArgumentException("could not turn " + args + " into an array.")))
                     .map(arg -> translateIfPossible(arg, translator))
                     .toArray());
         }

@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 import static org.junit.Assert.*;
@@ -77,15 +78,11 @@ public class ObjectUtilsTest {
     @Test
     @Parameters(method = "vals")
     public void testToArrayUnsafe(Object obj, String unused, Object[] expected) {
+        Optional<Object[]> array = ObjectUtils.toArrayUnsafe(obj);
         if (expected != null) {
-            assertArrayEquals(expected, ObjectUtils.toArrayUnsafe(obj));
+            assertArrayEquals(expected, array.get());
         } else {
-            try {
-                ObjectUtils.toArrayUnsafe(obj);
-                fail("expected IllegalArgumentException");
-            } catch (IllegalArgumentException e) {
-
-            }
+            assertEquals(Optional.empty(), array);
         }
     }
 
