@@ -6,18 +6,21 @@ import java.util.function.Supplier;
 import static java.util.Objects.requireNonNull;
 
 /**
- * A {@link Translator} that binds a {@link Locale} to an existing {@link Translator}. The bound {@link Locale} will be
+ * Arg {@link Translator} that binds a {@link Locale} to an existing {@link Translator}. The bound {@link Locale} will be
  * used when calling the {@link TranslationFunction} functionality using by providing it through the
  * {@link #defaultLocale()} method. All other functionality will delegate to the underlying {@link Translator}.
  *
- * @param <R> the return type of the delegated {@link Translator}
+ * @param <Return> the return type of the delegated {@link Translator}
  */
-public final class BoundLocaleTranslator<R> implements Translator<R> {
+public final class BoundLocaleTranslator<Return>
+        implements Translator<Return> {
 
-    private final Translator<R> parentTranslator;
+    private final Translator<Return> parentTranslator;
     private final Supplier<Locale> locale;
 
-    private BoundLocaleTranslator(Translator<R> parentTranslator, Supplier<Locale> locale) {
+    private BoundLocaleTranslator(
+            final Translator<Return> parentTranslator,
+            final Supplier<Locale> locale) {
         this.parentTranslator = requireNonNull(parentTranslator, "parentTranslator");
         this.locale = requireNonNull(locale, "locale");
     }
@@ -32,30 +35,35 @@ public final class BoundLocaleTranslator<R> implements Translator<R> {
      * @param <R> return type of the delegated {@link Translator}
      * @return the {@link BoundLocaleTranslator}
      */
-    public static <R> BoundLocaleTranslator<R> of(Translator<R> parentTranslator, Supplier<Locale> locale) {
+    public static <R> BoundLocaleTranslator<R> of(
+            final Translator<R> parentTranslator,
+            final Supplier<Locale> locale) {
         return new BoundLocaleTranslator<>(parentTranslator, locale);
     }
 
     @Override
     public Locale defaultLocale() {
-        return getLocale().get();
+        return locale().get();
     }
 
     @Override
-    public <K extends TranslationKey<K, A>, A> R apply(Locale locale, K key, A arg) {
-        return getParentTranslator().apply(locale, key, arg);
+    public <Key extends TranslationKey<Key, Arg>, Arg> Return apply(
+            final Locale locale,
+            final Key key,
+            final Arg arg) {
+        return parentTranslator().apply(locale, key, arg);
     }
 
     @Override
-    public Translator<R> bindLocale(Supplier<Locale> locale) {
+    public Translator<Return> bindLocale(Supplier<Locale> locale) {
         return new BoundLocaleTranslator<>(parentTranslator, locale);
     }
 
-    public Translator<R> getParentTranslator() {
+    public Translator<Return> parentTranslator() {
         return parentTranslator;
     }
 
-    public Supplier<Locale> getLocale() {
+    public Supplier<Locale> locale() {
         return locale;
     }
 
@@ -68,7 +76,8 @@ public final class BoundLocaleTranslator<R> implements Translator<R> {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(
+            final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BoundLocaleTranslator<?> that = (BoundLocaleTranslator<?>) o;

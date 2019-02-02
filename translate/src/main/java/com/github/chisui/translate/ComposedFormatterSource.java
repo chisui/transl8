@@ -4,20 +4,35 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
 
-public final class ComposedFormatterSource<T, R> implements FormatterSource<R> {
+/**
+ * Composes {@link KeyToString} with a message source and a {@link Formatter} constructor into a
+ * {@link FormatterSource}.
+ *
+ * @param <Msg> type of message to format
+ * @param <Return> return value of the {@link Formatter}
+ */
+public final class ComposedFormatterSource<Msg, Return>
+        implements FormatterSource<Return> {
 
     private final KeyToString keyToString;
-    private final BiFunction<? super String, ? super Locale, ? extends Optional<T>> messageSource;
-    private final BiFunction<? super T, ? super Locale, ? extends Formatter<Object, R>> toFormatter;
+    private final BiFunction<
+            ? super String, ? super Locale,
+            ? extends Optional<Msg>> messageSource;
+    private final BiFunction<
+            ? super Msg, ? super Locale,
+            ? extends Formatter<Object, Return>> toFormatter;
 
     ComposedFormatterSource(
-            KeyToString keyToString,
-            BiFunction<? super String, ? super Locale, ? extends Optional<T>> messageSource,
-            BiFunction<? super T, ? super Locale, ? extends Formatter<Object, R>> toFormatter) {
+            final KeyToString keyToString,
+            final BiFunction<
+                    ? super String, ? super Locale,
+                    ? extends Optional<Msg>> messageSource,
+            final BiFunction<
+                    ? super Msg, ? super Locale,
+                    ? extends Formatter<Object, Return>> toFormatter) {
         this.keyToString = requireNonNull(keyToString, "keyToString");
         this.messageSource = requireNonNull(messageSource, "messageSource");
         this.toFormatter = requireNonNull(toFormatter, "toFormatter");
@@ -27,9 +42,12 @@ public final class ComposedFormatterSource<T, R> implements FormatterSource<R> {
     @SuppressWarnings({
             "unchecked", // Java's type system is not strong enough.
     })
-    public <K extends TranslationKey<K, A>, A> Optional<Formatter<A, R>> formatterOf(Locale locale, K key) {
+    public <Key extends TranslationKey<Key, Arg>, Arg>
+            Optional<Formatter<Arg, Return>> formatterOf(
+                    final Locale locale,
+                    final Key key) {
         return (Optional) messageSource.apply(keyToString.toKeyString(key), locale)
-                .map(t -> toFormatter.apply(t, locale));
+                .map(msg -> toFormatter.apply(msg, locale));
     }
 
     @Override

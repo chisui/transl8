@@ -5,6 +5,8 @@ import org.junit.Test;
 import java.util.Locale;
 
 import static com.github.chisui.translate.EnumTranslationKeyTest.TestEnumWithOverride.SOME_CONST;
+import static java.util.Locale.ENGLISH;
+import static java.util.Locale.GERMAN;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
@@ -24,7 +26,7 @@ public class TranslatorTest {
     public void testOf() {
         Translator<String> translator = Translator.<String, String>of(
                 ResourceBundleMessageSource.of("testBundle"),
-                MessageFormatFormatter::<Object>unsafeOf);
+                MessageFormatFormatter::unsafeOf);
 
         String actual = translator.apply(ExampleKeyEnum.KEY, "world", "Mars");
         assertEquals("hello world and Mars", actual);
@@ -32,22 +34,22 @@ public class TranslatorTest {
 
     @Test
     public void testBindLocaleBindsLocale() {
-        withDefaultLocale(Locale.GERMAN, () -> {
-            Translator<String> boundTranslator = translator.bindLocale(Locale.ENGLISH);
+        withDefaultLocale(GERMAN, () -> {
+            Translator<String> boundTranslator = translator.bindLocale(ENGLISH);
 
-            assertEquals(Locale.GERMAN, translator.defaultLocale());
-            assertEquals(Locale.ENGLISH, boundTranslator.defaultLocale());
+            assertEquals(GERMAN, translator.defaultLocale());
+            assertEquals(ENGLISH, boundTranslator.defaultLocale());
         });
     }
 
     @Test
     public void testBindLocaleUsesBoundLocale() {
-        withDefaultLocale(Locale.GERMAN, () -> {
-            translator.bindLocale(Locale.ENGLISH)
+        withDefaultLocale(GERMAN, () -> {
+            translator.bindLocale(ENGLISH)
                     .apply(TRANSLATABLE);
 
             assertArrayEquals(new Object[]{
-                    Locale.ENGLISH,
+                    ENGLISH,
                     TranslationKey.of(ExampleTranslatable.class),
                     TRANSLATABLE,
             }, capture);
@@ -56,8 +58,8 @@ public class TranslatorTest {
 
     @Test
     public void testBindLocaleCanBindLocaleAgain() {
-        withDefaultLocale(Locale.GERMAN, () -> {
-            translator.bindLocale(Locale.ENGLISH)
+        withDefaultLocale(GERMAN, () -> {
+            translator.bindLocale(ENGLISH)
                     .bindLocale(Locale.FRENCH)
                     .apply(TRANSLATABLE);
 
@@ -71,9 +73,9 @@ public class TranslatorTest {
 
     @Test
     public void testApplyLocaleRequest() {
-        translator.apply(Locale.GERMAN, REQ);
+        translator.apply(GERMAN, REQ);
         assertArrayEquals(new Object[]{
-                Locale.GERMAN,
+                GERMAN,
                 REQ.key(),
                 REQ.arg(),
         }, capture);
@@ -81,9 +83,9 @@ public class TranslatorTest {
 
     @Test
     public void testApplyLocaleTranslatable() {
-        translator.apply(Locale.GERMAN, TRANSLATABLE);
+        translator.apply(GERMAN, TRANSLATABLE);
         assertArrayEquals(new Object[]{
-                Locale.GERMAN,
+                GERMAN,
                 TranslationKey.of(TRANSLATABLE),
                 TRANSLATABLE,
         }, capture);
@@ -91,9 +93,9 @@ public class TranslatorTest {
 
     @Test
     public void testApplyLocaleKeyVoid() {
-        translator.apply(Locale.GERMAN, SOME_CONST);
+        translator.apply(GERMAN, SOME_CONST);
         assertArrayEquals(new Object[]{
-                Locale.GERMAN,
+                GERMAN,
                 SOME_CONST,
                 null,
         }, capture);
@@ -101,8 +103,8 @@ public class TranslatorTest {
 
     @Test
     public void testApplyLocaleKeyVarArgs() {
-        translator.apply(Locale.GERMAN, ExampleKeyEnum.KEY, "hello", "world");
-        assertEquals(Locale.GERMAN, capture[0]);
+        translator.apply(GERMAN, ExampleKeyEnum.KEY, "hello", "world");
+        assertEquals(GERMAN, capture[0]);
         assertEquals(ExampleKeyEnum.KEY, capture[1]);
         assertArrayEquals(new String[]{"hello", "world"}, (Object[]) capture[2]);
     }
@@ -111,9 +113,9 @@ public class TranslatorTest {
 
     @Test
     public void testApplyLocaleKeyArg() {
-        translator.apply(Locale.GERMAN, SomeEnum.KEY, 42L);
+        translator.apply(GERMAN, SomeEnum.KEY, 42L);
         assertArrayEquals(new Object[]{
-                Locale.GERMAN,
+                GERMAN,
                 SomeEnum.KEY,
                 42L,
         }, capture);
@@ -121,9 +123,9 @@ public class TranslatorTest {
 
     @Test
     public void testApplyRequest() {
-        withDefaultLocale(Locale.GERMAN, () -> translator.apply(REQ));
+        withDefaultLocale(GERMAN, () -> translator.apply(REQ));
         assertArrayEquals(new Object[]{
-                Locale.GERMAN,
+                GERMAN,
                 REQ.key(),
                 REQ.arg(),
         }, capture);
@@ -131,9 +133,9 @@ public class TranslatorTest {
 
     @Test
     public void testApplyTranslatable() {
-        withDefaultLocale(Locale.GERMAN, () -> translator.apply(TRANSLATABLE));
+        withDefaultLocale(GERMAN, () -> translator.apply(TRANSLATABLE));
         assertArrayEquals(new Object[]{
-                Locale.GERMAN,
+                GERMAN,
                 TranslationKey.of(TRANSLATABLE),
                 TRANSLATABLE,
         }, capture);
@@ -141,9 +143,9 @@ public class TranslatorTest {
 
     @Test
     public void testApplyKeyVoid() {
-        withDefaultLocale(Locale.GERMAN, () -> translator.apply(SOME_CONST));
+        withDefaultLocale(GERMAN, () -> translator.apply(SOME_CONST));
         assertArrayEquals(new Object[]{
-                Locale.GERMAN,
+                GERMAN,
                 SOME_CONST,
                 null,
         }, capture);
@@ -151,17 +153,17 @@ public class TranslatorTest {
 
     @Test
     public void testApplyKeyVarArgs() {
-        withDefaultLocale(Locale.GERMAN, () -> translator.apply(ExampleKeyEnum.KEY, "hello", "world"));
-        assertEquals(Locale.GERMAN, capture[0]);
+        withDefaultLocale(GERMAN, () -> translator.apply(ExampleKeyEnum.KEY, "hello", "world"));
+        assertEquals(GERMAN, capture[0]);
         assertEquals(ExampleKeyEnum.KEY, capture[1]);
         assertArrayEquals(new String[]{"hello", "world"}, (Object[]) capture[2]);
     }
 
     @Test
     public void testApplyKeyArg() {
-        withDefaultLocale(Locale.GERMAN, () -> translator.apply(SomeEnum.KEY, 42L));
+        withDefaultLocale(GERMAN, () -> translator.apply(SomeEnum.KEY, 42L));
         assertArrayEquals(new Object[]{
-                Locale.GERMAN,
+                GERMAN,
                 SomeEnum.KEY,
                 42L,
         }, capture);

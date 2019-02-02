@@ -17,6 +17,7 @@ import java.util.function.Supplier;
 
 import static com.github.chisui.translate.EnumTranslationKeyTest.TestEnumIndirect.SOME_CONST;
 import static com.github.chisui.translate.EnumTranslationKeyTest.TestEnumKey.HELLO;
+import static java.util.Locale.ENGLISH;
 import static nl.jqno.equalsverifier.Warning.NULL_FIELDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,18 +28,15 @@ import static org.mockito.Mockito.when;
 @RunWith(JUnitParamsRunner.class)
 public class BoundLocaleTranslatorTest {
 
-    @Rule
-    public final MockitoRule mockitoRule = MockitoJUnit.rule();
+    @Rule public final MockitoRule mockitoRule = MockitoJUnit.rule();
 
-    @Mock Supplier<Locale> locale;
     @Mock Translator<String> translator;
 
     private BoundLocaleTranslator<String> classUnderTest;
 
     @Before
     public void setUp() {
-        when(locale.get()).thenReturn(Locale.ENGLISH);
-        classUnderTest = BoundLocaleTranslator.of(translator, locale);
+        classUnderTest = BoundLocaleTranslator.of(translator, () -> ENGLISH);
     }
 
     @Test
@@ -54,19 +52,21 @@ public class BoundLocaleTranslatorTest {
         String[] args = {"hello", "world"};
         return new Object[][] {
                 action(t -> t.apply(TranslationRequest.of(HELLO, args)),
-                        t -> t.apply(Locale.ENGLISH, (TranslationKey) HELLO, (Object) args)),
+                        t -> t.apply(ENGLISH, (TranslationKey) HELLO, (Object) args)),
                 action(t -> t.apply(translatable),
-                        t -> t.apply(Locale.ENGLISH, TranslationKey.of(translatable), translatable)),
+                        t -> t.apply(ENGLISH, TranslationKey.of(translatable), translatable)),
                 action(t -> t.apply(SOME_CONST),
-                        t -> t.apply(Locale.ENGLISH, SOME_CONST, null)),
+                        t -> t.apply(ENGLISH, SOME_CONST, null)),
                 action(t -> t.apply(HELLO, "hello", "world"),
-                        t -> t.apply(eq(Locale.ENGLISH), (TranslationKey) eq(HELLO), (Object) any(String[].class))),
+                        t -> t.apply(eq(ENGLISH), (TranslationKey) eq(HELLO), (Object) any(String[].class))),
                 action(t -> t.apply(HELLO, args),
-                        t -> t.apply(eq(Locale.ENGLISH), (TranslationKey) eq(HELLO), (Object) any(String[].class))),
+                        t -> t.apply(eq(ENGLISH), (TranslationKey) eq(HELLO), (Object) any(String[].class))),
         };
     }
 
-    private Object[] action(Function<TranslationFunction<String>, String> action, Function<Translator<String>, String> delegatesTo) {
+    private Object[] action(
+            final Function<TranslationFunction<String>, String> action,
+            final Function<Translator<String>, String> delegatesTo) {
         return new Object[] { action, delegatesTo };
     }
 
@@ -83,28 +83,25 @@ public class BoundLocaleTranslatorTest {
 
     @Test
     public void testToString() {
-        assertThat(BoundLocaleTranslator.of(
-                new Translator<String>() {
-                    @Override
-                    public <K extends TranslationKey<K, A>, A> String apply(Locale locale, K key, A arg) {
-                        return null;
-                    }
+        Translator<String> translator = new Translator<String>() {
+            @Override public <K extends TranslationKey<K, A>, A> String apply(Locale locale, K key, A arg) {
+                return null;
+            }
 
-                    public String toString() {
-                        return "myTranslator";
-                    }
-                },
-                new Supplier<Locale>() {
-                    @Override
-                    public Locale get() {
-                        return null;
-                    }
+            public String toString() {
+                return "myTranslator";
+            }
+        };
+        Supplier<Locale> locale = new Supplier<Locale>() {
+            @Override public Locale get() {
+                return null;
+            }
 
-                    public String toString() {
-                        return "myLocale";
-                    }
-                }
-        ).toString())
+            public String toString() {
+                return "myLocale";
+            }
+        };
+        assertThat(BoundLocaleTranslator.of(translator, locale).toString())
                 .isEqualTo("BoundLocaleTranslator{parentTranslator=myTranslator, locale=myLocale}");
     }
 }

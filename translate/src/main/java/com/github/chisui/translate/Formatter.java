@@ -8,7 +8,10 @@ import java.util.stream.Collector;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.*;
 
-public interface Formatter<A, R> extends BiFunction<TranslationFunction<R> , A, R>, VerifyArguments {
+public interface Formatter<Arg, Return>
+        extends
+            BiFunction<TranslationFunction<Return> , Arg, Return>,
+            VerifyArguments {
 
     static <T, R> Collector<Formatter<? super T, R>, ?, CollectingFormatter<T, R>> toFormatter(
             Collector<? super R, ?, R> collector) {

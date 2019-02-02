@@ -1,10 +1,8 @@
 package com.github.chisui.translate;
 
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
@@ -43,11 +41,11 @@ import static java.util.Objects.requireNonNull;
  *     </tr>
  * </table>
  *
- * @param <R> type of return value
+ * @param <Return> type of return value
  * @see <a href="https://github.com/chisui/translate/tree/master/translate-verify">Tutorial</a>
  */
 @FunctionalInterface
-public interface Translator<R> extends TranslationFunction<R> {
+public interface Translator<Return> extends TranslationFunction<Return> {
 
     /**
      * Determines the default Locale to apply if a {@link TranslationFunction} method is called.
@@ -70,11 +68,13 @@ public interface Translator<R> extends TranslationFunction<R> {
      *
      * @param locale argument
      * @param req the {@link TranslationRequest} argument
-     * @param <K> the key type of the {@link TranslationRequest}
-     * @param <A> the argument type ot the {@link TranslationRequest}
+     * @param <Key> the key type of the {@link TranslationRequest}
+     * @param <Arg> the argument type ot the {@link TranslationRequest}
      * @return the function result
      */
-    default <K extends TranslationKey<K, A>, A> R apply(Locale locale, TranslationRequest<K, A> req) {
+    default <Key extends TranslationKey<Key, Arg>, Arg> Return apply(
+            final Locale locale,
+            final TranslationRequest<Key, Arg> req) {
         return apply(locale, req.key(), req.arg());
     }
 
@@ -87,7 +87,9 @@ public interface Translator<R> extends TranslationFunction<R> {
      * @param t translatable argument
      * @return the function result
      */
-    default <T extends Translatable> R apply(Locale locale, T t) {
+    default <T extends Translatable> Return apply(
+            final Locale locale,
+            final T t) {
         return apply(locale, TranslationKey.of(t), t);
     }
 
@@ -99,10 +101,12 @@ public interface Translator<R> extends TranslationFunction<R> {
      *
      * @param locale argument
      * @param key argument
-     * @param <K> self referential key type
+     * @param <Key> self referential key type
      * @return the function result
      */
-    default <K extends TranslationKey<K, Void>> R apply(Locale locale, K key) {
+    default <Key extends TranslationKey<Key, Void>> Return apply(
+            final Locale locale,
+            final Key key) {
         return apply(locale, key, null);
     }
 
@@ -114,16 +118,19 @@ public interface Translator<R> extends TranslationFunction<R> {
      * @param locale argument
      * @param key argument
      * @param args arguments the key expects
-     * @param <K> self referential key type
-     * @param <A> argument type of the key
+     * @param <Key> self referential key type
+     * @param <Arg> argument type of the key
      * @return the function result
      */
     @SuppressWarnings({
             "unchecked", // unchecked cast to actually call non varargs format method.
-            "rawtype", // cast through rawtype to let key accept A... instead of A[].
+            "rawtype", // cast through rawtype to let key accept Arg... instead of Arg[].
     })
-    default <K extends TranslationKey<K, A[]>, A> R apply(Locale locale, K key, A... args) {
-        return (R) apply(locale, (TranslationKey) key, (Object) args);
+    default <Key extends TranslationKey<Key, Arg[]>, Arg> Return apply(
+            final Locale locale,
+            final Key key,
+            final Arg... args) {
+        return (Return) apply(locale, (TranslationKey) key, (Object) args);
     }
 
     /**
@@ -132,11 +139,14 @@ public interface Translator<R> extends TranslationFunction<R> {
      * @param locale argument
      * @param key argument
      * @param args arguments the key expects
-     * @param <K> self referential key type
-     * @param <A> argument type of the key
+     * @param <Key> self referential key type
+     * @param <Arg> argument type of the key
      * @return the function result
      */
-    <K extends TranslationKey<K, A>, A> R apply(Locale locale, K key, A arg);
+    <Key extends TranslationKey<Key, Arg>, Arg> Return apply(
+            final Locale locale,
+            final Key key,
+            final Arg arg);
 
     /**
      * Applies the {@link Translator} to the given {@link TranslationKey} and its argument.
@@ -145,11 +155,13 @@ public interface Translator<R> extends TranslationFunction<R> {
      *
      * @param key argument
      * @param args arguments the key expects
-     * @param <K> self referential key type
-     * @param <A> argument type of the key
+     * @param <Key> self referential key type
+     * @param <Arg> argument type of the key
      * @return the function result
      */
-    default <K extends TranslationKey<K, A>, A> R apply(K key, A arg) {
+    default <Key extends TranslationKey<Key, Arg>, Arg> Return apply(
+            final Key key,
+            final Arg arg) {
         return apply(defaultLocale(), key, arg);
     }
 
@@ -163,7 +175,8 @@ public interface Translator<R> extends TranslationFunction<R> {
      * @see #defaultLocale()
      * @see Translator
      */
-    default Translator<R> bindLocale(Locale locale) {
+    default Translator<Return> bindLocale(
+            final Locale locale) {
         requireNonNull(locale, "locale");
         return bindLocale(() -> locale);
     }
@@ -178,7 +191,8 @@ public interface Translator<R> extends TranslationFunction<R> {
      * @see #defaultLocale()
      * @see Translator
      */
-    default Translator<R> bindLocale(Supplier<Locale> locale) {
+    default Translator<Return> bindLocale(
+            final Supplier<Locale> locale) {
         return BoundLocaleTranslator.of(this, locale);
     }
 
@@ -193,10 +207,11 @@ public interface Translator<R> extends TranslationFunction<R> {
      * the expected type.
      *
      * @param f {@link TriFunction} to turn to turn into a {@link Translator}.
-     * @param <R> return type of the {@link Translator}
+     * @param <Return> return type of the {@link Translator}
      * @return the {@link Translator}
      */
-    static <R> Translator<R> ofUnsafe(TriFunction<Locale, TranslationKey<?, ?>, Object, R> f) {
+    static <Return> Translator<Return> ofUnsafe(
+            final TriFunction<Locale, TranslationKey<?, ?>, Object, Return> f) {
         return f::apply;
     }
 
@@ -207,14 +222,18 @@ public interface Translator<R> extends TranslationFunction<R> {
      * @param keyToString function
      * @param messageSource function
      * @param toFormatter function
-     * @param <T> type of message
-     * @param <R> return type of {@link Translator}
+     * @param <Msg> type of message
+     * @param <Return> return type of {@link Translator}
      * @return the translator
      */
-    static <T, R> FormatterSourceTranslator<R> of(
-            KeyToString keyToString,
-            BiFunction<? super String, ? super Locale, Optional<T>> messageSource,
-            BiFunction<? super T, ? super Locale, ? extends Formatter<Object, R>> toFormatter) {
+    static <Msg, Return> FormatterSourceTranslator<Return> of(
+            final KeyToString keyToString,
+            final BiFunction<
+                    ? super String, ? super Locale,
+                    Optional<Msg>> messageSource,
+            final BiFunction<
+                    ? super Msg, ? super Locale,
+                    ? extends Formatter<Object, Return>> toFormatter) {
         return new FormatterSourceTranslator<>(FormatterSource.of(keyToString, messageSource, toFormatter));
     }
 
@@ -224,14 +243,18 @@ public interface Translator<R> extends TranslationFunction<R> {
      *
      * @param messageSource function
      * @param toFormatter function
-     * @param <T> type of message
-     * @param <R> return type of {@link Translator}
+     * @param <Msg> type of message
+     * @param <Return> return type of {@link Translator}
      * @return the translator
      * @see DefaultKeyToString
      */
-    static <T, R> FormatterSourceTranslator<R> of(
-            BiFunction<? super String, ? super Locale, Optional<T>> messageSource,
-            BiFunction<? super T, ? super Locale, ? extends Formatter<Object, R>> toFormatter) {
+    static <Msg, Return> FormatterSourceTranslator<Return> of(
+            final BiFunction<
+                    ? super String, ? super Locale,
+                    Optional<Msg>> messageSource,
+            final BiFunction<
+                    ? super Msg, ? super Locale,
+                    ? extends Formatter<Object, Return>> toFormatter) {
         return of(DefaultKeyToString.instance(), messageSource, toFormatter);
     }
 }

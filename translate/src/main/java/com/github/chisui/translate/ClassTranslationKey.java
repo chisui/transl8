@@ -10,7 +10,8 @@ import static java.util.Objects.requireNonNull;
  *
  * @param <C> concrete {@link Translatable} subtype.
  */
-public final class ClassTranslationKey<C extends Translatable> implements TranslationKey<ClassTranslationKey<C>, C> {
+public final class ClassTranslationKey<C extends Translatable>
+        implements TranslationKey<ClassTranslationKey<C>, C> {
 
     private final Class<C> cls;
 

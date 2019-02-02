@@ -12,43 +12,43 @@ import static java.util.Arrays.asList;
 /**
  * Represents a Translation key.
  *
- * A translation key represents the key component of a translation. The type parameter {@code A} represents the type of
- * arguments that this key expects. {@code A} does not have a value that is associated with a key but rather a so called
- * shadow type parameter that is only used to indicate to the compiler that certain constraints hold. This mechanism is
- * used on {@link TranslationFunction} to ensure that certain methods can only be called if {@code A} fulfills certain
- * constraints. For example {@link TranslationFunction#apply(TranslationKey)} can only be called for keys where
- * {@code A} is {@link Void}.
+ * Arg translation key represents the key component of a translation. The type parameter {@code Arg} represents the type
+ * of arguments that this key expects. {@code Arg} does not have a value that is associated with a key but rather a so
+ * called shadow type parameter that is only used to indicate to the compiler that certain constraints hold. This
+ * mechanism is used on {@link TranslationFunction} to ensure that certain methods can only be called if {@code Arg}
+ * fulfills certain constraints. For example {@link TranslationFunction#apply(TranslationKey)} can only be called for
+ * keys where {@code Arg} is {@link Void}.
  *
  * The <a href="https://github.com/chisui/translate/tree/master/translate-verify">translate-verify</a> artifact provides
  * ways to verify in tests that implementations of {@link TranslationKey} follow this contract and that messages
- * corresponding to keys actually do have the a shape that excepts arguments of type {@code A}.
+ * corresponding to keys actually do have the a shape that excepts arguments of type {@code Arg}.
  *
- * When implementing {@link EnumTranslationKey} {@code SELF} <strong>has</strong> to be the implementing {@link Enum}
+ * When implementing {@link EnumTranslationKey} {@code Self} <strong>has</strong> to be the implementing {@link Enum}
  * itself. You may create intermediate interfaces that extend {@link EnumTranslationKey} or {@link TranslationKey} but
- * the actual classes that implement these interfaces have to be {@link Enum}s and {@code SELF} type parameter
- * <strong>has</strong> to be the concrete type of the implementing enum. That means the {@code SELF} type parameter
+ * the actual classes that implement these interfaces have to be {@link Enum}s and {@code Self} type parameter
+ * <strong>has</strong> to be the concrete type of the implementing enum. That means the {@code Self} type parameter
  * has to e passed through.
  *
  * <pre>
- *     interface MyKey<SELF extends MyKey<SELF>> extends EnumTranslationKey<SELF, String>
+ *     interface MyKey<Self extends MyKey<Self>> extends EnumTranslationKey<Self, String>
  * </pre>
  *
  * For further information consult the <a href="https://github.com/chisui/translate/wiki/Tutorial">Tutorial</a>.
  *
- * @param <SELF> self referential type. This always has to be the exact enum type that implements the interface.
- * @param <A> the type of argument this translation key expects. If it can be multiple use An array. If the key doesn't
- *           expect any argument use {@link Void}.
+ * @param <Self> self referential type. This always has to be the exact enum type that implements the interface.
+ * @param <Arg> the type of argument this translation key expects. If it can be multiple use An array. If the key
+ *             doesn't expect any argument use {@link Void}.
  * @see TranslationKey
  * @see ClassTranslationKey
  * @see TranslationFunction
  * @see <a href="https://github.com/chisui/translate/tree/master/translate-verify">Tutorial</a>
  */
 public interface EnumTranslationKey<
-        SELF extends Enum<SELF> & EnumTranslationKey<SELF, A>,
-        A> extends TranslationKey<SELF, A> {
+        Self extends Enum<Self> & EnumTranslationKey<Self, Arg>,
+        Arg> extends TranslationKey<Self, Arg> {
 
     /**
-     * Returns the actual type of {@code A}. This does not have to be a {@link Class} since {@code A} may be a
+     * Returns the actual type of {@code Arg}. This does not have to be a {@link Class} since {@code Arg} may be a
      * parametrized type like {@code List<String>}. Although for collection types you should use array types anyways.
      * This default implementation retrieves the type by using reflection to introspect the Enum type itself.
      *

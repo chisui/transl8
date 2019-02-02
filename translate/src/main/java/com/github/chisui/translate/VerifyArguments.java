@@ -1,6 +1,7 @@
 package com.github.chisui.translate;
 
 import java.lang.reflect.Type;
+import java.util.function.Predicate;
 
 /**
  * Represents a dynamic function that can verify its argument type.
@@ -30,4 +31,14 @@ public interface VerifyArguments {
      * @return whether or not this functor can accept arguments of the given type.
      */
     boolean acceptsArgumentsOfType(Type type);
+
+    /**
+     * Turns a {@link VerifyArguments} into a {@link Predicate} on {@link Type Types}.
+     *
+     * @param va to turn into a {@link Predicate}
+     * @return the {@link Predicate}
+     */
+    static Predicate<Type> asPredicate(VerifyArguments va) {
+        return va::acceptsArgumentsOfType;
+    }
 }

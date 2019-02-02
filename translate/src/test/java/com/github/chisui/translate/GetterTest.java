@@ -21,4 +21,15 @@ public class GetterTest {
     public void testVerifyArgs(boolean expected, Class<?> cls) {
         assertEquals(expected, TO_UPPER_CASE.acceptsArgumentsOfType(cls));
     }
+
+    @Test
+    @Parameters({
+            "true, java.lang.String",
+            "false, java.lang.Object",
+            "false, java.lang.Number",
+    })
+    public <T extends CharSequence> void genericVarifyArgsTest(boolean expected, Class<?> cls) {
+        Getter<T, String> g = String.class::cast;
+        assertTrue(g.acceptsArgumentsOfType(String.class));
+    }
 }
