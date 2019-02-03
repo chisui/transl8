@@ -1,12 +1,11 @@
 package com.github.chisui.translate;
 
 
-public final class ToTranslationRequest implements TranslationFunction<TranslationRequest<?, ?>> {
-
-    public static final ToTranslationRequest INSTANCE = new ToTranslationRequest();
-
-    private ToTranslationRequest() {
-    }
+/**
+ * A {@link TranslationFunction} that wraps all calls in a {@link TranslationRequest}.
+ */
+public enum ToTranslationRequest implements TranslationFunction<TranslationRequest<?, ?>> {
+    INSTANCE;
 
     @Override
     public <K extends TranslationKey<K, A>, A> TranslationRequest<K, A> apply(TranslationRequest<K, A> req) {

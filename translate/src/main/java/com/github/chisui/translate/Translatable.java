@@ -9,6 +9,4 @@ package com.github.chisui.translate;
  * @see TranslationOverride
  * @see <a href="https://github.com/chisui/translate/tree/master/translate-verify">Tutorial</a>
  */
-public interface Translatable {
-
-}
+public interface Translatable {}

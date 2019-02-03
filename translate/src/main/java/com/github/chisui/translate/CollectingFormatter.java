@@ -6,12 +6,20 @@ import java.util.stream.Collector;
 
 import static java.util.Objects.requireNonNull;
 
-public final class CollectingFormatter<Arg, Return> implements Formatter<Arg, Return> {
+/**
+ * A {@link Formatter} that applies its argument to multiple sub {@link Formatter Formatters} and combines the result
+ * using a {@link Collector}.
+ *
+ * @param <Arg> argument type
+ * @param <Return> return type
+ */
+public final class CollectingFormatter<Arg, Return>
+        implements Formatter<Arg, Return> {
 
     private final Collector<? super Return, ?, Return> collector;
     private final List<Formatter<? super Arg, Return>> subFormatters;
 
-    public CollectingFormatter(
+    CollectingFormatter(
             Collector<? super Return, ?, Return> collector,
             List<Formatter<? super Arg, Return>> subFormatters) {
         this.collector = requireNonNull(collector, "CollectingFormatter.collector");
@@ -20,15 +28,15 @@ public final class CollectingFormatter<Arg, Return> implements Formatter<Arg, Re
 
     @Override
     public boolean acceptsArgumentsOfType(Type type) {
-        return subFormatters.stream()
+        return subFormatters().stream()
                 .allMatch(f -> f.acceptsArgumentsOfType(type));
     }
 
     @Override
     public Return apply(TranslationFunction<Return> translator, Arg arg) {
-        return subFormatters.stream()
+        return subFormatters().stream()
                 .map(f -> f.apply(translator, arg))
-                .collect(collector);
+                .collect(collector());
     }
 
     public Collector<? super Return, ?, Return> collector() {
